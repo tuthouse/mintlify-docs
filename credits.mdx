@@ -1,49 +1,81 @@
 ---
-title: "Credits & Billing"
-description: "How you pay for agent usage — what a credit is worth, what things cost, and what's free."
+title: "Credits"
+description: "Credits pay for the AI. Trading is paid separately, on-chain. Here's the difference."
 ---
 
-Chatting with your agent is metered. Credits cover the cost of the model doing the work.
-
-## What a credit is worth
-
-Credits are held in plain dollars — **$1 buys $1 of balance**. There's no separate token and no exchange rate to work out.
-
-Top up between **$1 and $500** at a time.
-
-## How to pay
+There are **two separate things you pay for** in AGNT, and mixing them up is the most common source of confusion.
 
 <CardGroup cols={2}>
-  <Card title="Card" icon="credit-card">
-    Pay by card through Stripe. Balance lands as soon as the payment clears.
+  <Card title="Credits — for the AI" icon="message">
+    Talking to your agent. Paid from a **dollar balance you top up** in advance.
   </Card>
-  <Card title="Crypto" icon="coins">
-    Pay from your agent wallet in USDC or ETH on Base, ETH on Ethereum or Robinhood Chain, or SOL on Solana.
+  <Card title="Fees — for the chain" icon="link">
+    Swaps, sends, NFTs, launches. Paid **from your wallet, per transaction**. Credits are not involved.
   </Card>
 </CardGroup>
 
-## What things cost
+## Trading does not use credits
 
-**Chat.** Each message costs what the model cost to run, with the platform's margin applied. Short exchanges cost a fraction of a cent; the minimum charge on any message is one cent.
+**You do not need any credit balance to trade.**
 
-**Token analysis.** Running a deep analysis on a token costs **25¢** per successful call. You are not charged if it fails.
+When your agent swaps, sends, mints, snipes or launches, the cost comes out of the **transaction itself** — the platform fee is taken from the trade, and network gas comes from your wallet. Your credit balance is untouched.
 
-**Everything else** — swaps, sends, NFT actions, launches — is charged as a fee on the transaction itself, not from credits. Those are covered in [Wallet & Trading](/wallet) and [Launching a Token](/launch).
+A wallet with zero credits can still trade all day. A wallet with $500 of credits and no ETH cannot.
+
+| What you're doing | What pays for it |
+|---|---|
+| Chatting with your agent | **Credits** |
+| Running a token analysis | **Credits** |
+| Swapping or bridging | 0.4% fee on the swap + gas |
+| Sniping a token | 1% fee on the swap + gas |
+| Minting or sniping an NFT | 5% of mint price + gas |
+| Buying an NFT | 1% of price + gas |
+| Selling an NFT | No AGNT fee — marketplace and royalties only |
+| Launching a token | $1 (first launch free) + trading fee on the token |
+
+## What a credit is worth
+
+**$1 buys $1 of balance.** No token, no exchange rate, no conversion to work out — the balance is just dollars.
+
+Top up between **$1 and $500** at a time.
+
+## How to top up
+
+<CardGroup cols={2}>
+  <Card title="Card" icon="credit-card">
+    Pay by card through Stripe. The balance lands as soon as the payment clears.
+  </Card>
+  <Card title="Crypto" icon="coins">
+    Pay from your agent wallet — USDC or ETH on Base, ETH on Ethereum or Robinhood Chain, or SOL on Solana.
+  </Card>
+</CardGroup>
+
+## What chatting costs
+
+Each message costs what the model cost to run, plus the platform's margin. In practice most messages cost a **fraction of a cent**; the minimum charge on any message is **one cent**.
+
+Longer conversations cost more than short ones, because the agent re-reads the thread each time. A deep research task costs more than a quick question.
+
+**Token analysis** is the one tool with its own price: **25¢** per successful run. You are not charged if it fails.
 
 ## What's free
 
-You get a daily allowance of free messages before metering starts, so light use costs nothing.
+You get a **daily allowance of free messages** before metering starts. Light use costs nothing at all, and the allowance resets each day.
 
 <Note>
-If the billing system is ever unavailable, messages are allowed through rather than blocked. You are never locked out of your agent because of a metering problem.
+If billing is ever unavailable, messages go through rather than being blocked. **You are never locked out of your agent because of a metering problem.**
 </Note>
 
 ## Checking your balance
 
-Ask your agent:
+Ask your agent directly:
 
 ```text
 what's my credit balance?
 ```
 
-It returns your balance and recent usage.
+It returns your balance and recent usage. You can also top up from the same conversation.
+
+<Tip>
+Running low mid-conversation? Top up and carry on — the balance applies immediately, there's nothing to reconnect or refresh.
+</Tip>

@@ -14,7 +14,8 @@
         "group": "Getting Started",
         "pages": [
           "index",
-          "quickstart"
+          "quickstart",
+          "credits"
         ]
       },
       {
@@ -27,8 +28,7 @@
         "group": "Wallet & Commerce",
         "pages": [
           "wallet",
-          "launch",
-          "credits"
+          "launch"
         ]
       },
       {
