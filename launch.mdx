@@ -22,7 +22,19 @@ Your agent creates the token and its liquidity pool, and returns a card with the
 
 ## Fees
 
-A small fee accrues from trading on your launched token. The **creator keeps the majority share**, and — as the token grows — the creator's share grows with it. You can claim your accrued fees from your agent.
+**Launching.** Your **first launch is free**. After that a launch costs **$1** on Base and Robinhood Chain, or **$5** on Solana, paid from your wallet at the time of launch.
+
+**Trading on your token.** A fee accrues from every trade. The **creator keeps the majority share** and can claim accrued fees from their agent at any time.
+
+The trading fee differs by chain:
+
+| Chain | Trading fee |
+|---|---|
+| Base | Starts high and decays to **1.095%** within the first ten seconds |
+| Robinhood Chain | Flat **1.095%** |
+| Solana | **1.25%** |
+
+The opening fee on Base is deliberate — it makes the first seconds of trading expensive for bots, and it settles almost immediately.
 
 <Note>
   Token launches are on-chain and irreversible. Start small, double-check the details on the confirmation card, and only launch what you intend to.

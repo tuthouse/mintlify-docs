@@ -7,7 +7,7 @@ Your agent comes with a wallet built in. It's created for you on sign-in — no 
 
 ## Chains
 
-Trades and bridges route through **[Relay](https://relay.link)**, so your agent can move assets across **every chain Relay supports** — all the major EVM chains (Base, Ethereum, Robinhood Chain, Arbitrum, Optimism, Polygon, and many more) plus **Solana**. You're not limited to a handful of networks.
+Trades and bridges route through **[Relay](https://relay.link)**, so your agent can move assets across the major EVM chains — **Base, Ethereum, Robinhood Chain, Arbitrum, Optimism, Polygon** and more — plus **Solana**. Coverage varies a little by action: swapping reaches more chains than launching does.
 
 Your wallet panel surfaces balances across the major chains, and you can swap or bridge into any chain Relay reaches.
 
@@ -45,6 +45,8 @@ Your agent validates the recipient, shows you the amount and destination, and re
 
 **Swap fee.** AGNT charges a **0.4% fee** (40 bps) on swaps. It's built into the quote — the amount you see on the Buy / Sell card already accounts for it, so there's no surprise at execution. That fee is how the platform sustains itself; there's no separate subscription to trade.
 
-**NFT fees.** When your agent mints or buys an NFT for you, AGNT takes **5% on mints** and **1% on buys** — a percentage of the price, on top of which you pay network gas. **Selling** an NFT carries no AGNT fee (only the marketplace's own fees and any creator royalties apply).
+**NFT fees.** When your agent mints or buys an NFT for you, AGNT takes **5% on mints** and **1% on buys** — a percentage of the price, on top of which you pay network gas. Mint sniping is a mint, so it carries the same **5%**. **Selling** an NFT carries no AGNT fee (only the marketplace's own fees and any creator royalties apply).
+
+**Token sniping.** Sniping a token charges **1%** instead of the ordinary 0.4% swap fee — it replaces that fee rather than stacking on top of it.
 
 **Network gas.** Gas and routing are handled for you where possible. When a network requires gas that can't be sponsored, your wallet needs a small balance of that chain's native token to cover it.
