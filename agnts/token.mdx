@@ -1,0 +1,57 @@
+---
+title: "$AGNTS & the Vault"
+description: "The token under the collection, and the vault that gives every piece a floor."
+---
+
+**$AGNTS** is the ERC-20 beneath the collection. It is not a separate product — it is the price of an AGNT, expressed so a market can trade it.
+
+<Note>
+$AGNTS is **not deployed yet**. Everything on this page switches on with it.
+</Note>
+
+## Supply
+
+**1,000,000,000 $AGNTS**, fixed.
+
+- **50%** fair launch on AGNT
+- **50%** to the tut™ AMM vault, backing the pieces
+
+Trades run through custom v4 pools, and your agent can buy autonomously at launch.
+
+## The peg
+
+Every AGNT has a fixed $AGNTS value by tier. The vault trades at it **both directions** — bring $AGNTS and take a piece out, bring a piece and take $AGNTS.
+
+| Tier | Peg |
+|---|---|
+| Common | 100,000 |
+| Rare | 500,000 |
+| Epic | 1,500,000 |
+| Legendary | 3,000,000 |
+
+Which means every piece has a redemption value that **moves with the token**, rather than depending on someone bidding for that specific piece.
+
+## Vault fees
+
+| | Fee |
+|---|---|
+| Take a random piece out | 5% of the floor |
+| Pick the exact piece | 15% of the floor |
+| Sell a piece in | none — full peg |
+| Burn | none |
+
+The fee is **one way**. Selling into the vault always returns the full peg.
+
+## Activation
+
+Activating burns **50% of the peg** and sends the other half to treasury. A 10% activation fee is distributed to holders who are already activated.
+
+<Note>
+The 50/50 split is decided but not yet built — the contract currently burns the full peg with no treasury leg.
+</Note>
+
+## It burns from both ends
+
+The pieces burn — 5 Commons into a Rare, on up the ladder. The token burns — every activation destroys peg permanently.
+
+Same vault backs both. One gets scarcer, the other gets scarcer, and they are priced against each other.

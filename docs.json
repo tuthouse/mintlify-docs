@@ -29,6 +29,15 @@
           "wallet",
           "launch"
         ]
+      },
+      {
+        "group": "AGNTS Collection",
+        "pages": [
+          "agnts/index",
+          "agnts/burns",
+          "agnts/rewards",
+          "agnts/token"
+        ]
       }
     ],
     "global": {
