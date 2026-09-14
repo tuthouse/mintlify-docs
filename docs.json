@@ -27,7 +27,8 @@
         "group": "Wallet & Commerce",
         "pages": [
           "wallet",
-          "launch"
+          "launch",
+          "credits"
         ]
       },
       {
