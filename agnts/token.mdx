@@ -44,7 +44,16 @@ The fee is **one way**. Selling into the vault always returns the full peg.
 
 ## Activation
 
-Activating burns **50% of the peg** and sends the other half to treasury. A 10% activation fee is distributed to holders who are already activated.
+Activation has its own cost, separate from the peg — **100,000 $AGNTS for a Common**, rising to 1,000,000 for a Legendary. Half is burned, half goes to treasury. A further **10% is paid in ETH** to treasury.
+
+| Tier | $AGNTS | Burned | Treasury |
+|---|---|---|---|
+| Common | 100,000 | 50,000 | 50,000 |
+| Rare | 300,000 | 150,000 | 150,000 |
+| Epic | 600,000 | 300,000 | 300,000 |
+| Legendary | 1,000,000 | 500,000 | 500,000 |
+
+The peg is what the vault pays for a piece. Activation is a fee. They are different numbers and neither depends on the other.
 
 <Note>
 The 50/50 split is decided but not yet built — the contract currently burns the full peg with no treasury leg.
@@ -52,6 +61,6 @@ The 50/50 split is decided but not yet built — the contract currently burns th
 
 ## It burns from both ends
 
-The pieces burn — 5 Commons into a Rare, on up the ladder. The token burns — every activation destroys peg permanently.
+The pieces burn — 5 Commons into a Rare, on up the ladder. The token burns — every activation destroys half its cost permanently.
 
 Same vault backs both. One gets scarcer, the other gets scarcer, and they are priced against each other.
