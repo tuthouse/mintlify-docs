@@ -1,35 +1,35 @@
 ---
 title: "$AGNTS & the Vault"
-description: "The token under the collection, and the vault that swaps pieces for a fixed amount of $AGNTS per tier."
+description: "The token behind the collection, and the vault that swaps any piece for a set amount of it."
 ---
 
-**$AGNTS** is the ERC-20 beneath the collection. It is not a separate product — it is the price of an AGNT, expressed so a market can trade it.
+**\$AGNTS** is the token beneath the collection. It is not a separate product — it is the price of an AGNT, expressed so a market can trade it.
 
 <Note>
-$AGNTS is **not deployed yet**. Everything on this page switches on with it.
+\$AGNTS is **not deployed yet**. Everything on this page switches on with it.
 </Note>
 
 ## Supply
 
-**1,000,000,000 $AGNTS**, fixed.
+**1,000,000,000 \$AGNTS**, fixed.
 
 - **50%** fair launch on AGNT
 - **50%** held by the tut™ AMM vault for swaps
 
-$AGNTS will be tradeable on AGNT from launch, through custom v4 pools.
+\$AGNTS will be tradeable on AGNT from launch, through custom v4 pools.
 
-## The peg
+## What a piece is worth at the vault
 
-Every AGNT has a fixed $AGNTS value by tier. The vault trades at it **both directions** — bring $AGNTS and take a piece out, bring a piece and take $AGNTS.
+Every AGNT has a fixed \$AGNTS value set by its tier. The vault swaps in **both directions** — hand over \$AGNTS and take a piece out, or hand in a piece and take \$AGNTS.
 
-| Tier | Peg |
+| Tier | Swap amount |
 |---|---|
 | Common | 100,000 |
 | Rare | 500,000 |
 | Epic | 1,500,000 |
 | Legendary | 3,000,000 |
 
-Which means the vault will accept any piece at the fixed amount for its tier, while it holds $AGNTS to pay.
+Which means the vault will accept any piece at the fixed amount for its tier, while it holds \$AGNTS to pay.
 
 ## Vault fees
 
@@ -37,32 +37,32 @@ Which means the vault will accept any piece at the fixed amount for its tier, wh
 |---|---|
 | Take a random piece out | 5% of the floor |
 | Pick the exact piece | 15% of the floor |
-| Sell a piece in | none — full peg |
+| Sell a piece in | none — you get the full amount |
 | Burn | none |
 
-The fee is **one way**. Selling into the vault always returns the full peg.
+The fee is **one way**. Selling a piece into the vault always pays the full amount.
 
 ## Activation
 
-Activation has its own cost, separate from the peg — **100,000 $AGNTS for a Common**, rising to 1,000,000 for a Legendary. Half is burned, half goes to treasury. A further **10% is paid in ETH** to treasury.
+Activation has its own cost, separate from the swap amount — **100,000 \$AGNTS for a Common**, rising to 1,000,000 for a Legendary. Half is burned, half goes to treasury. A further **10% is paid in ETH** to treasury.
 
-| Tier | $AGNTS | Burned | Treasury |
+| Tier | \$AGNTS | Burned | Treasury |
 |---|---|---|---|
 | Common | 100,000 | 50,000 | 50,000 |
 | Rare | 300,000 | 150,000 | 150,000 |
 | Epic | 600,000 | 300,000 | 300,000 |
 | Legendary | 1,000,000 | 500,000 | 500,000 |
 
-**Plus a fee of 10% of the piece's floor price, paid in ETH** to treasury. Note what that is a percentage of — the floor, not the $AGNTS cost.
+**Plus a fee of 10% of the piece's floor price, paid in ETH** to treasury. Note what that is a percentage of — the floor, not the \$AGNTS cost.
 
-The peg is what the vault pays for a piece. Activation is a fee. They are different numbers and neither depends on the other.
+The swap amount is what the vault gives you for a piece. Activation is a separate fee. They are two different numbers and changing one does not change the other.
 
 <Note>
 Activation is a **cost**, not a reward. What you pay is burned or goes to treasury — none of it is distributed to other holders.
 </Note>
 
 <Note>
-The 50/50 split is decided but not yet built — the contract currently burns the full peg with no treasury leg.
+The 50/50 split is decided but not yet built — right now the whole amount is burned and none of it reaches the treasury.
 </Note>
 
 ## It burns from both ends
