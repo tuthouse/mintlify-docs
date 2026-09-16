@@ -3,14 +3,14 @@ title: "Rewards"
 description: "How activation works and how tier weight decides your share of distributions."
 ---
 
-Activation makes a piece eligible for the protocol's fee distribution. Each distribution is split across activated pieces by tier weight.
+Activation makes a piece eligible for the protocol's fee distribution. Each payout is split across activated pieces by tier weight.
 
 <Note>
-Activation is a **cost**, not a reward stream. What you pay to activate is burned or goes to treasury — none of it is paid out to other holders. See [$AGNTS &amp; the Vault](/agnts/token) for what it costs.
+Activation is a **cost**, not a reward stream. What you pay to activate is burned or goes to treasury — none of it is paid out to other holders. See [\$AGNTS &amp; the Vault](/agnts/token) for what it costs.
 </Note>
 
 <Note>
-Rewards are **not live**. They switch on with the $AGNTS token. The weights below are a proposal, not final.
+Rewards are **not live**. They switch on with the \$AGNTS token. The weights below are a proposal, not final.
 </Note>
 
 ## Weight by tier
@@ -24,7 +24,7 @@ Rewards are **not live**. They switch on with the $AGNTS token. The weights belo
 
 The weights run steeper than the tier ratios on purpose. Five Commons stake 5; one Rare stakes 6. A Rare's weight (6) is higher than the combined weight of the five Commons burned to draw it (5), and the same holds at every rung. Otherwise a burn would leave your share unchanged.
 
-Each tier's share of the pool is *derived* — activated count × weight, over the total — and re-derived **weekly**. It is never a fixed percentage set at launch.
+Each tier's share of the pool is *derived* — activated count × weight, over the total — and recalculated **every week**. It is never a fixed percentage set at launch.
 
 ## Where the fees come from
 
@@ -39,20 +39,20 @@ When distributions go live, the pool will be funded by 70% of the fee streams li
 
 
 
-Separately, **1.095% on $AGNTS trades goes 100% to the protocol**, with none of it entering the pool. Burns pay no fee at all.
+Separately, **1.095% on \$AGNTS trades goes 100% to the protocol**, with none of it entering the pool. Burns pay no fee at all.
 
 Fees collected before distributions go live are retained by the treasury and are not distributed retroactively.
 
 ## How your share is worked out
 
-Your share of a distribution is your weight divided by the total weight of everything activated.
+Your share of a payout is your weight divided by the total weight of everything activated.
 
 ```text
 your share  =  your weight  ÷  total activated weight
 ```
 
 Nothing more to it. If you hold an activated Epic and the total activated weight across the
-collection is 1,699, your share is 21 ÷ 1,699 — about 1.2% of whatever is distributed that epoch.
+collection is 1,699, your share is 21 out of 1,699 — about 1.2% of whatever is paid out that week.
 
 ### Worked example
 
@@ -69,11 +69,11 @@ Say these are activated:
 Commons take the largest share because there are far more of them, while a single
 Legendary carries 55× the weight of a single Common.
 
-These shares are **derived, not fixed** — they move as pieces are activated and deactivated, and
-they are recalculated every epoch.
+These shares are **worked out from the numbers, not fixed in advance** — they move as pieces are activated and deactivated, and
+they are recalculated every week.
 
 <Note>
-Fees distributed depend entirely on protocol activity in that epoch. There is no fixed rate, no
+What gets paid out depends entirely on how much activity there was that week. There is no fixed rate, no
 guaranteed amount, and no promised outcome — if there is no activity, there is nothing to
 distribute. Nothing here is a projection or a forecast.
 </Note>

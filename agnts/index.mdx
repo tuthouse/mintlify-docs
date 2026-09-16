@@ -1,13 +1,13 @@
 ---
 title: "The AGNTS Collection"
-description: "6,969 hand-drawn on-chain agents. Fixed supply, four tiers, and a ladder that only ever destroys pieces."
+description: "6,969 hand-drawn agents. The supply never grows, and burning only ever makes it smaller."
 ---
 
 **AGNTS** is a collection of 6,969 agents, every trait hand-drawn by tut™. No AI.
 
-All 6,969 pieces — art, traits and tier — were generated and committed **before** the mint opened. Nothing was decided at mint time, and `tierOf(tokenId)` is readable by any RPC client. The collection mixes hand-drawn crayon work with hidden pixel-art AGNTS on a 13×13 grid.
+Every piece — its art, its traits and its tier — was finished and locked in **before** the mint opened. Nothing was decided while the mint was running, and anyone can check any piece's tier directly on the blockchain. The collection mixes hand-drawn crayon work with hidden pixel-art AGNTS on a 13×13 grid.
 
-The cap is **6,969 and immutable**. Nothing mints after genesis, so every path through the economy either holds supply flat or destroys it. The collection gets smaller the more it is used.
+The cap is **6,969 and can never change**. No new pieces are ever made, so everything that happens either leaves the count alone or lowers it. The collection only gets smaller.
 
 ## The four tiers
 
@@ -18,26 +18,26 @@ The cap is **6,969 and immutable**. Nothing mints after genesis, so every path t
 | Epic | 250 | 3.6% |
 | Legendary | 50 | 0.7% |
 
-Two numbers govern everything: the **peg**, which is the fixed amount the vault swaps a piece for, and the **weight**, which sets an activated piece's share of a distribution. They are deliberately different.
+Two numbers drive everything: the **swap amount**, which is what the vault gives you for a piece, and the **weight**, which sets how big a share an activated piece gets of a payout. They are deliberately different.
 
 ## Where things stand
 
 <Note>
 **Live:** the collection is minted and trading on secondary at a 5% royalty.
 
-**Not open yet:** minting is paused, burning is disabled, and nothing has been burned. The $AGNTS token is not deployed, so the vault, activation and rewards are all waiting on it.
+**Not open yet:** minting is paused, burning is disabled, and nothing has been burned. The \$AGNTS token is not deployed, so the vault, activation and rewards are all waiting on it.
 </Note>
 
 ## Contracts
 
-Robinhood chain 4663. ERC-721C with the Limit Break transfer validator.
+Robinhood chain 4663. The collection enforces its royalty at the blockchain level, so marketplaces cannot skip it.
 
 | | |
 |---|---|
 | Collection | `0x57eFd86cf3ab1812CB47F0FD3c3d5bf0eFb1F2D5` |
 | Mint controller | `0xfAD3335ba59c8e4438C2be47147080EF5809bF7e` |
 | Treasury & royalty | `0xEdaA4c0e0056eD6A17A755493c283296Fe8202Bb` |
-| Royalty | 500 bps (5%) |
+| Royalty | 5% |
 
 <CardGroup cols={2}>
   <Card title="Burning" icon="fire" href="/agnts/burns">
