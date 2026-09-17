@@ -108,6 +108,22 @@ target, or a suggestion that \$AGNTS reaches any of them. \$AGNTS is not deploye
 
 **The two parts move differently, and that is the point of keeping them separate.** The \$AGNTS part is ten times larger for a Legendary than for a Common, and it rises and falls with the token. The ETH part is thirty times larger and does not move with the token at all, because it tracks the floor. At a \$100k market cap the ETH fee is about 70% of what a Legendary holder pays; at \$1M it is about 19%.
 
+### Staying affordable if the token moves
+
+The cost is a fixed number of \$AGNTS, so if the token rises the dollar cost rises with it. The
+protocol can lower the amount, and **can only ever lower it** — the setter refuses any change that
+would raise the cost. Nobody can be charged more than the price they saw when they decided to buy.
+
+Published as intent rather than enforced in code, the amounts come down as the token moves:
+
+| Market cap | Common | Rare | Epic | Legendary |
+|---|---|---|---|---|
+| Under \$1M | \$50 | \$150 | \$300 | \$500 |
+| \$1M – \$10M | \$200 | \$600 | \$1,200 | \$2,000 |
+
+These are targets for what activation should *cost*, not forecasts of where the token goes. The
+\$AGNTS amount is adjusted to hit them; the token is not expected to do anything in particular.
+
 ### When activation costs more than the piece
 
 Because the \$AGNTS part rises with the token while the ETH part does not, every tier reaches a point where activating costs more than simply buying another piece at the floor:

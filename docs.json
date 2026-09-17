@@ -35,6 +35,7 @@
         "group": "AGNTS Collection",
         "pages": [
           "agnts/index",
+          "agnts/how-it-fits",
           "agnts/burns",
           "agnts/rewards",
           "agnts/token"

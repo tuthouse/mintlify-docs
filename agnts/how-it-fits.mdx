@@ -1,0 +1,120 @@
+---
+title: "How It Fits Together"
+description: "Where the money comes from, what an activated piece gets, where \$AGNTS is required, and the limits of all three."
+---
+
+There are three different things you can hold here, and they are not the same proposition. The
+collection, activation and the token are connected, but each one gets something different — and
+one of them gets nothing at all from the others.
+
+## Three different things to want
+
+| | What you hold | What it gets you | What it does **not** get you |
+|---|---|---|---|
+| **Collector** | an AGNT | the art, the tier, a piece of a fixed 6,969 that only shrinks. Sell it, burn it up a tier, or swap it at the vault | any share of fees. An unactivated piece earns nothing |
+| **Activator** | an AGNT you have switched on | a weighted share of whatever is distributed that period, for as long as you hold it | anything guaranteed. If there is no activity, there is nothing to share |
+| **Token holder** | \$AGNTS | a token you can trade, and the thing you need to activate a piece or buy one from the vault | **a share of fees. Holding \$AGNTS does not entitle you to any distribution, ever** |
+
+<Warning>
+**Holding \$AGNTS pays you nothing.** Distributions go to activated pieces, not to token holders.
+Buying the token is not buying a claim on the protocol's revenue, and nothing on this page should
+be read as saying otherwise.
+</Warning>
+
+## Where the money comes from
+
+The pool that activated pieces share is funded by fees the protocol actually collects. Most of
+that comes from the [launchpad](/launch).
+
+Projects launch there because it is the path of least resistance: you tell your agent to launch
+a token, and it deploys on **Base**, **Robinhood Chain** or **Solana** without you touching a
+contract. The first launch is free, the next costs a dollar, and — the part that matters to
+whoever is launching — **the creator keeps the majority share of the trading fee on their own
+token**, claimable at any time.
+
+The protocol's cut is the smaller slice, and it is that slice which funds everything below.
+
+| Stream | Rate | Collecting today? |
+|---|---|---|
+| Secondary sales of AGNTS | 5% | Yes |
+| Curated launches | 0.4% | Yes |
+| Vault swaps — random piece | 5% | Needs the token |
+| Vault swaps — pick your own | 15% | Needs the token |
+
+## Where it goes
+
+**70% to activated pieces. 30% to the treasury.** Split by weight, recalculated weekly — see
+[Rewards](/agnts/rewards).
+
+Note what is *not* in that sentence: token holders. The 1.095% taken on \$AGNTS trades goes
+**100% to the protocol** and none of it enters the pool. There is no path by which holding the
+token pays you.
+
+<Note>
+**Nothing has been distributed to date.** Fees collected before distributions go live are kept by
+the treasury and are not paid out retroactively.
+</Note>
+
+## Where \$AGNTS is required
+
+Exactly two places, and both of them are things you *do*, not things you hold:
+
+1. **Activating a piece** — 100,000 \$AGNTS for a Common up to 1,000,000 for a Legendary. Half is
+   burned, half goes to treasury. Plus a fee of 10% of the piece's floor, paid in ETH.
+2. **Buying a piece out of the vault** — the swap amount for that tier, plus the vault fee.
+
+That is the whole of it. The token is the thing you spend to use the collection.
+
+## The limits of that demand
+
+Worth being blunt about, because the arithmetic has a hard edge to it.
+
+**Activating every piece once would cost more \$AGNTS than exists.**
+
+| Tier | Pieces | Cost each | Total |
+|---|---|---|---|
+| Common | 5,669 | 100,000 | 566,900,000 |
+| Rare | 1,000 | 300,000 | 300,000,000 |
+| Epic | 250 | 600,000 | 150,000,000 |
+| Legendary | 50 | 1,000,000 | 50,000,000 |
+| | **6,969** | | **1,066,900,000** |
+
+Against a fixed supply of **1,000,000,000**. Half of that supply sits in the vault, so the amount
+actually circulating would cover about **5,000 Commons and nothing else**.
+
+And half of every activation is **burned**, so activating destroys the means to activate. The
+collection cannot be fully switched on — not at these prices, not ever, by construction.
+
+This is the real ceiling, and it is why the activation cost is **a number that can be lowered and
+never raised**. As the token moves, the amount comes down. See
+[\$AGNTS &amp; the Vault](/agnts/token).
+
+## What keeps it going after the first wave
+
+Three things recur, and all three are driven by churn rather than by growth:
+
+- **Activation does not survive a sale.** Sell an activated piece and it switches off. The buyer
+  starts from scratch. Every time a piece changes hands, activating it is a fresh cost.
+- **Activation does not survive a burn.** Climbing the ladder destroys the pieces you burned,
+  along with their activation. The piece you draw comes back switched off.
+- **Half of every activation is burned**, so the supply falls as the collection is used.
+
+Being straight about it: these are real and repeating, but they are bounded by how often 6,969
+pieces — shrinking toward roughly 4,115 — actually trade and climb. This is not an uncapped
+source of demand and should not be read as one.
+
+## Open questions
+
+Honest status, because these are product decisions as much as documentation:
+
+| Question | Where it stands |
+|---|---|
+| Does activation survive a sale? | **No.** Settled and enforced on chain — the piece's ownership counter moves and the activation resets |
+| Does it survive a burn? | **No.** The burned pieces are destroyed and the new one arrives inactive |
+| How does it stay affordable if the token rises? | The cost ratchets **down only**, adjusted as the token moves. Published as intent, not enforced in code |
+| What happens if the vault runs low? | **Open.** The vault holds roughly half of both supplies and releases Common to maintain it, but the behaviour at the bottom is not settled |
+
+<Warning>
+AGNTS are collectibles. Activation is a mechanic within the collection, not an investment, and
+nothing on this page should be read as a return, a yield, or a promise of any payment.
+</Warning>
