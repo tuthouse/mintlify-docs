@@ -55,6 +55,72 @@ Activation has its own cost, separate from the swap amount — **100,000 \$AGNTS
 
 **Plus a fee of 10% of the piece's floor price, paid in ETH** to treasury. Note what that is a percentage of — the floor, not the \$AGNTS cost.
 
+### How the floor is worked out
+
+The ETH fee is 10% of the floor — and the floor comes from the ladder, not from the market. **A Rare counts as five Commons, an Epic as fifteen, a Legendary as thirty**: the same counts it takes to burn your way up a rung. One observed price, the Common floor, sets all four.
+
+That is deliberate. Above Common there is not enough trading to read a price from — a few dozen Epics and Legendaries sit in public hands, so the lowest listing is whatever one person happened to ask, with nothing underneath it to correct it. Working the floor out from the ladder instead means the fee cannot be moved by a single listing, and no price feed is needed to charge it.
+
+At a Common floor of \$77.25:
+
+| Tier | Counts as | Floor | ETH fee (10%) |
+|---|---|---|---|
+| Common | 1 Common | \$77.25 | \$7.73 |
+| Rare | 5 Commons | \$386.25 | \$38.63 |
+| Epic | 15 Commons | \$1,158.75 | \$115.88 |
+| Legendary | 30 Commons | \$2,317.50 | \$231.75 |
+
+### What it costs in dollars
+
+The \$AGNTS amount never changes. What changes is what \$AGNTS is worth. Below is the same fee worked out at three different token prices, on the fixed supply of 1,000,000,000.
+
+**At a \$100k market cap** — \$AGNTS at \$0.0001
+
+| Tier | \$AGNTS | Worth | ETH fee | Total to activate |
+|---|---|---|---|---|
+| Common | 100,000 | \$10.00 | \$7.73 | **\$17.73** |
+| Rare | 300,000 | \$30.00 | \$38.63 | **\$68.63** |
+| Epic | 600,000 | \$60.00 | \$115.88 | **\$175.88** |
+| Legendary | 1,000,000 | \$100.00 | \$231.75 | **\$331.75** |
+
+**At a \$500k market cap** — \$AGNTS at \$0.0005
+
+| Tier | \$AGNTS | Worth | ETH fee | Total to activate |
+|---|---|---|---|---|
+| Common | 100,000 | \$50.00 | \$7.73 | **\$57.73** |
+| Rare | 300,000 | \$150.00 | \$38.63 | **\$188.63** |
+| Epic | 600,000 | \$300.00 | \$115.88 | **\$415.88** |
+| Legendary | 1,000,000 | \$500.00 | \$231.75 | **\$731.75** |
+
+**At a \$1M market cap** — \$AGNTS at \$0.001
+
+| Tier | \$AGNTS | Worth | ETH fee | Total to activate |
+|---|---|---|---|---|
+| Common | 100,000 | \$100.00 | \$7.73 | **\$107.73** |
+| Rare | 300,000 | \$300.00 | \$38.63 | **\$338.63** |
+| Epic | 600,000 | \$600.00 | \$115.88 | **\$715.88** |
+| Legendary | 1,000,000 | \$1,000.00 | \$231.75 | **\$1,231.75** |
+
+<Note>
+These are three arbitrary token prices picked to show the arithmetic. They are not a forecast, a
+target, or a suggestion that \$AGNTS reaches any of them. \$AGNTS is not deployed and has no price.
+</Note>
+
+**The two parts move differently, and that is the point of keeping them separate.** The \$AGNTS part is ten times larger for a Legendary than for a Common, and it rises and falls with the token. The ETH part is thirty times larger and does not move with the token at all, because it tracks the floor. At a \$100k market cap the ETH fee is about 70% of what a Legendary holder pays; at \$1M it is about 19%.
+
+### When activation costs more than the piece
+
+Because the \$AGNTS part rises with the token while the ETH part does not, every tier reaches a point where activating costs more than simply buying another piece at the floor:
+
+| Tier | Activation matches the floor at |
+|---|---|
+| Common | **\$695,000** |
+| Rare | \$1.16M |
+| Epic | \$1.74M |
+| Legendary | \$2.09M |
+
+Commons reach that point first, and Commons are most of the collection. This is worth knowing before you activate anything. The activation cost is a number the protocol can lower — and only lower, never raise — which is the lever for it.
+
 The swap amount is what the vault gives you for a piece. Activation is a separate fee. They are two different numbers and changing one does not change the other.
 
 <Note>
