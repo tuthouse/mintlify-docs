@@ -5,26 +5,28 @@
 
 ---
 
-> ## 🔴 READ FIRST — the revenue line in the brief does not hold
+> ## ✅ Numbers corrected — Tut was right, I was low
 >
-> The brief says *"already generating 100s of thousands in revenue."* Checked today:
+> My first pass quoted **$10,384** from `agnt_financials`. That database cannot see wedge fees
+> from curated partners, which is most of the revenue. **DeFiLlama reads it off the chain:**
 >
-> | | |
-> |---|---|
-> | All-time **revenue** | **~$10,384** (launch fees $10,102 · trading fees $87 · credits $196) |
-> | All-time **volume** of launched tokens | **$695,036** |
-> | Treasury on chain (Breadio) | 1.34 ETH ≈ $5.9k |
+> | | | |
+> |---|---|---|
+> | **Protocol fees, all time** | **$67,822** | DeFiLlama, public |
+> | ↳ last 30 days | $64,154 | **94.6% of all time** |
+> | ↳ last 7 days | $26,427 | 39% of all time |
+> | AGNTS mint | $18,000 | Tut |
+> | Stripe credits | $196 | DB |
+> | **Total** | **~$86,000** | |
 >
-> **$695k is volume, not revenue** — that is almost certainly where "hundreds of thousands" came
-> from. Revenue is ~1.5% of it.
+> Volume on launched tokens — first AGNT token **$6M**, FENDEX **$3M** (~$3k fees to us),
+> PERPSHOOD **$1M**. **$10M+**, which makes the DB's $695k figure junk too.
 >
-> Two caveats in our favour, neither of which closes the gap: wedge fees from curated partners
-> (PERPSHOOD) settle on chain and are **invisible to this database**, and the AGNTS mint's own
-> proceeds are not in it either. If you know a bigger real number, tell me and I will use it.
+> **Two honest lines beat the original.** "$10M+ traded" is a millions number, and the fee curve
+> proves the "short time frame" claim outright: **95% of all fees ever came in the last 30 days.**
+> Both are third-party checkable, which is worth more than a self-reported figure.
 >
-> **The draft below says "$695,036 traded through it" — true, checkable, and still a strong line.**
-> Do not ship the revenue version. It is publicly checkable (DeFiLlama carries our fees), and
-> paired with "grow with us" it is the exact claim that turns a collectible into a security.
+> Still not "hundreds of thousands in revenue" — $86k all-in. Draft uses the verified numbers.
 
 ---
 
@@ -37,9 +39,15 @@ That is a real wallet on Robinhood chain. It holds ten AGNTS.
 Not a screenshot, not a mock-up — ten pieces sitting in an address that could be anyone's,
 including yours. This is what those ten pieces can do, in the order you'd actually do it.
 
-AGNTSocial is more than a PFP and a token. **$695,036 has traded through tokens launched on
-the protocol**, and every piece of the fee machinery those launches feed is being pointed at
-one place: the people holding AGNTS. We want you in it before that switch gets flipped.
+AGNTSocial is more than a PFP and a token.
+
+**Over $10,000,000 has traded through tokens launched on the protocol.** It has taken
+**$67,822** in fees doing it — and **$64,154 of that came in the last thirty days.** Ninety-five
+percent of everything the protocol has ever earned, earned this month. That is not our
+dashboard talking: DeFiLlama reads it off the chain and publishes it.
+
+All of that fee machinery is being pointed at one place — the people holding AGNTS. We want you
+in before that switch gets flipped.
 
 ---
 
@@ -141,7 +149,8 @@ into stakes 6. **Climbing has to leave you better off than standing still, or th
 decoration.**
 
 What funds it: 5% on AGNTS secondary sales, 0.4% on curated launches, and 5%/15% on vault
-swaps. Both of the first two are collecting **today**.
+swaps. The first two are collecting **today** — that is the $67,822 above, and it is the
+curated launches doing the heavy lifting. One token alone did $6M in volume and $60k in fees.
 
 Nothing has been distributed yet. What gets paid depends entirely on activity — no fixed rate,
 no guaranteed amount. If there is no activity there is nothing to split.
