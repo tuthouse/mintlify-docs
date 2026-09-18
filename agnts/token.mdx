@@ -44,52 +44,63 @@ The fee is **one way**. Selling a piece into the vault always pays the full amou
 
 ## Activation
 
-Activation has its own cost, separate from the swap amount: **100,000 \$AGNTS — the same for every
-tier.** Half is burned, half goes to treasury. A further **10% of that amount is paid in ETH** to
-treasury.
+Activation has its own cost, separate from the swap amount. Two parts:
 
 | | |
 |---|---|
-| Cost | 100,000 \$AGNTS |
-| Burned | 50,000 |
-| Treasury | 50,000 |
-| ETH fee | 10% of the \$AGNTS value |
+| **\$AGNTS** | **100,000 — the same for every tier.** Half burned, half to treasury |
+| **ETH** | **10% of the piece's floor** — so this part scales with tier |
 
-**A Common and a Legendary pay exactly the same to switch on.** Tier decides your share of
-distributions afterwards — it does not decide what activation costs.
+A Common and a Legendary pay the same \$AGNTS. The ETH side is where tier shows up.
 
-Activation is a service: it turns the piece on. The work is the same whichever tier you hold, so
-the price is the same. The fee needs no floor price and no oracle — nothing about it depends on
-reading the market.
+### How the floor is worked out
+
+The floor comes from the ladder, not from the market. **A Rare counts as five Commons, an Epic as
+fifteen, a Legendary as thirty** — the same counts it takes to burn your way up a rung. One
+observed price, the Common floor, sets all four.
+
+Above Common there is not enough trading to read a price from. A few dozen Epics and Legendaries
+sit in public hands, so the lowest listing is whatever one person happened to ask, with nothing
+underneath it to correct it. Working the floor out from the ladder means the fee cannot be moved
+by a single listing, and no price feed is needed to charge it.
+
+At a Common floor of \$30:
+
+| Tier | Counts as | Floor | ETH fee (10%) |
+|---|---|---|---|
+| Common | 1 Common | \$30 | \$3.00 |
+| Rare | 5 Commons | \$150 | \$15.00 |
+| Epic | 15 Commons | \$450 | \$45.00 |
+| Legendary | 30 Commons | \$900 | \$90.00 |
 
 ### What it costs in dollars
 
-The \$AGNTS amount never changes. What changes is what \$AGNTS is worth. On the fixed supply of
-1,000,000,000:
+The \$AGNTS amount never changes; what changes is what \$AGNTS is worth. With the collection and
+the token both at a \$1M market cap — a \$168 Common floor, \$AGNTS at \$0.001:
 
-| Token market cap | \$AGNTS | Worth | ETH fee | Total to activate |
-|---|---|---|---|---|
-| \$100k | 100,000 | \$10.00 | \$1.00 | **\$11.00** |
-| \$250k | 100,000 | \$25.00 | \$2.50 | **\$27.50** |
-| \$500k | 100,000 | \$50.00 | \$5.00 | **\$55.00** |
-| \$1M | 100,000 | \$100.00 | \$10.00 | **\$110.00** |
-| \$5M | 100,000 | \$500.00 | \$50.00 | **\$550.00** |
+| Tier | \$AGNTS | Worth | ETH fee | Total | Share of the piece |
+|---|---|---|---|---|---|
+| Common | 100,000 | \$100.00 | \$16.81 | **\$116.81** | 70% |
+| Rare | 100,000 | \$100.00 | \$84.03 | **\$184.03** | 22% |
+| Epic | 100,000 | \$100.00 | \$252.10 | **\$352.10** | 14% |
+| Legendary | 100,000 | \$100.00 | \$504.20 | **\$604.20** | 12% |
 
-Same row for every tier — there is only one price.
+Because both legs scale with the same activity, that last column stays roughly fixed at any size —
+activation is always about 70% of a Common and about 12% of a Legendary.
 
 <Note>
-These are arbitrary token prices picked to show the arithmetic. They are not a forecast, a target,
-or a suggestion that \$AGNTS reaches any of them. \$AGNTS is not deployed and has no price.
+That is an arbitrary market cap picked to show the arithmetic. It is not a forecast, a target, or a
+suggestion that \$AGNTS or the collection reaches it. \$AGNTS is not deployed and has no price.
 </Note>
 
 ### Staying affordable if the token moves
 
-The cost is a fixed number of \$AGNTS, so if the token rises the dollar cost rises with it. The
+The \$AGNTS cost is a fixed number, so if the token rises the dollar cost rises with it. The
 protocol can lower the amount, and **can only ever lower it** — the setter refuses any change that
 would raise the cost. Nobody can be charged more than the price they saw when they decided to buy.
 
-The piece itself moves too. Activation stays worth doing as long as the collection's floor keeps
-pace with the token, and both are driven by the same activity.
+The ETH side moves with the collection's floor rather than the token, so the two parts do not rise
+and fall together.
 
 <Note>
 Activation is a **cost**, not a reward. What you pay is burned or goes to treasury — none of it is
