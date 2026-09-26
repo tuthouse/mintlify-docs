@@ -1,6 +1,6 @@
 # docs-oracle: keeps docs.agnt.social in step with tut's announcements.
 #
-# Hourly: read the founder oracle's fact sheet from agnt.social; if it changed, Claude edits the
+# Daily (or on demand): read the founder oracle's fact sheet from agnt.social; if it changed, Claude edits the
 # affected pages in place (see .github/docs-oracle/update.mjs), links are checked, and the result
 # lands as ONE rolling PR, "docs-oracle/update", for tut to review and merge. Nothing publishes
 # on its own. While that PR is open, each run builds on top of it, so no earlier edit is lost.
@@ -12,7 +12,7 @@ name: docs-oracle
 
 on:
   schedule:
-    - cron: "17 * * * *"
+    - cron: "0 14 * * *" # daily, 14:00 UTC (10am ET); or Actions → docs-oracle → Run workflow
   workflow_dispatch:
 
 permissions:
@@ -72,7 +72,7 @@ jobs:
           git diff --cached --quiet && { echo "nothing to commit"; exit 0; }
 
           if [ "${{ steps.run.outputs.pages }}" = "0" ] && [ "${{ steps.base.outputs.open }}" = "false" ]; then
-            # No page needed changing: just record the facts as handled, so they aren't re-planned hourly.
+            # No page needed changing: just record the facts as handled, so they aren't re-planned every run.
             git commit -m "docs-oracle: record latest facts (no page changes)"
             git push origin "HEAD:main"
             exit 0
