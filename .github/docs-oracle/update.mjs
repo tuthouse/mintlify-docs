@@ -1,7 +1,7 @@
 // docs-oracle — keeps docs.agnt.social in step with what tut announces.
 //
 // Source: agnt.social's founder oracle (GET /api/founder-oracle), the same distilled fact
-// sheet every AGNT agent and the Discord bot answer from. When facts change, Claude works out
+// sheet every AGNT agent and the Discord bot answer from. When facts change, the model works out
 // which pages they affect and rewrites those pages IN PLACE: fix the stale line, keep the
 // structure, components and voice, add a section only when nothing fits. Nothing publishes on
 // its own — the workflow opens a PR that tut merges.
@@ -10,24 +10,20 @@
 // needing a human. The run also writes the facts it handled to state.json, so a merged PR
 // becomes the new baseline.
 //
-// Env: ANTHROPIC_API_KEY (required), ORACLE_URL (optional), GITHUB_OUTPUT / RUNNER_TEMP (Actions).
+// Env: OPENAI_API_KEY (required), DOCS_ORACLE_MODEL (optional), ORACLE_URL (optional), GITHUB_OUTPUT / RUNNER_TEMP (Actions).
 
 import fs from "node:fs";
 import path from "node:path";
-import Anthropic from "@anthropic-ai/sdk";
-import * as z from "zod/v4";
-import { betaZodOutputFormat } from "@anthropic-ai/sdk/helpers/beta/zod";
 
 const ROOT = process.cwd(); // the docs repo root
 const HERE = path.join(ROOT, ".github", "docs-oracle");
 const STATE_FILE = path.join(HERE, "state.json");
 const ORACLE_URL = process.env.ORACLE_URL || "https://agnt.social/api/founder-oracle";
-const MODEL = "claude-opus-5";
+// Cheap on purpose: runs weekly on a handful of short pages, and every edit is guarded + reviewed.
+const MODEL = process.env.DOCS_ORACLE_MODEL || "gpt-5-mini";
+const OPENAI_URL = "https://api.openai.com/v1/chat/completions";
 const MAX_PAGES_PER_RUN = 6;
 
-// Constructed lazily so the guards can be exercised without a key.
-let client;
-const claude = () => (client ??= new Anthropic());
 
 // ─── Inputs ──────────────────────────────────────────────────────────────────
 
@@ -113,31 +109,64 @@ function rejectReason(before, after) {
   return null;
 }
 
-// ─── Claude calls ────────────────────────────────────────────────────────────
+// ─── Model calls (OpenAI) ─────────────────────────────────────────────────────
 
-// fallbacks: "default" — if Claude declines, Anthropic re-runs the request on its
-// recommended fallback model instead of failing the run.
-const FALLBACK = { betas: ["server-side-fallback-2026-07-01"], fallbacks: "default" };
+async function openai(system, user, { json = null } = {}) {
+  const key = process.env.OPENAI_API_KEY;
+  if (!key) throw new Error("OPENAI_API_KEY not set");
+  const res = await fetch(OPENAI_URL, {
+    method: "POST",
+    signal: AbortSignal.timeout(300000),
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${key}` },
+    body: JSON.stringify({
+      model: MODEL,
+      reasoning_effort: "medium",
+      max_completion_tokens: 32000,
+      ...(json ? { response_format: { type: "json_schema", json_schema: { name: "plan", strict: true, schema: json } } } : {}),
+      messages: [{ role: "system", content: system }, { role: "user", content: user }],
+    }),
+  });
+  if (!res.ok) throw new Error(`OpenAI HTTP ${res.status}: ${(await res.text()).slice(0, 200)}`);
+  const choice = (await res.json())?.choices?.[0];
+  if (choice?.finish_reason === "length") throw new Error("model ran out of room");
+  if (choice?.message?.refusal) throw new Error("model refused");
+  return choice?.message?.content || "";
+}
 
-const PlanSchema = z.object({
-  edits: z.array(z.object({
-    page: z.string().describe("page slug exactly as listed, e.g. agnts/burns"),
-    why: z.string().describe("one sentence: what is stale or missing on this page"),
-    facts: z.array(z.string()).describe("the facts (verbatim from the list) this edit applies"),
-  })),
-  skipped: z.array(z.object({ fact: z.string(), reason: z.string() }))
-    .describe("new or changed facts that belong on no page, with why"),
-});
+const PLAN_SCHEMA = {
+  type: "object",
+  additionalProperties: false,
+  required: ["edits", "skipped"],
+  properties: {
+    edits: {
+      type: "array",
+      items: {
+        type: "object",
+        additionalProperties: false,
+        required: ["page", "why", "facts"],
+        properties: {
+          page: { type: "string", description: "page slug exactly as listed, e.g. agnts/burns" },
+          why: { type: "string", description: "one sentence: what is stale or missing on this page" },
+          facts: { type: "array", items: { type: "string" }, description: "the facts (verbatim) this edit applies" },
+        },
+      },
+    },
+    skipped: {
+      type: "array",
+      description: "new or changed facts that belong on no page, with why",
+      items: {
+        type: "object",
+        additionalProperties: false,
+        required: ["fact", "reason"],
+        properties: { fact: { type: "string" }, reason: { type: "string" } },
+      },
+    },
+  },
+};
 
 async function plan(pages, added, removed, current) {
   const catalog = pages.map((p) => `### PAGE ${p.slug}\n${p.source}`).join("\n\n");
-  const response = await claude().beta.messages.parse({
-    model: MODEL,
-    max_tokens: 16000,
-    thinking: { type: "adaptive" },
-    output_config: { effort: "high", format: betaZodOutputFormat(PlanSchema) },
-    ...FALLBACK,
-    system: `You maintain docs.agnt.social, the public documentation for AGNT. The founder's official
+  const raw = await openai(`You maintain docs.agnt.social, the public documentation for AGNT. The founder's official
 announcements have changed. Decide which existing pages must change so the docs stay accurate.
 
 - Prefer fixing pages that are now WRONG or STALE (say "not live yet" for something now live,
@@ -149,27 +178,16 @@ announcements have changed. Decide which existing pages must change so the docs 
 - A removed fact means the founder no longer says it; correct pages that still rely on it only if
   a current fact contradicts them.
 - At most ${MAX_PAGES_PER_RUN} pages. Use page slugs exactly as listed.`,
-    messages: [{
-      role: "user",
-      content: `NEW OR CHANGED FACTS:\n${added.map((f) => `- (${f.since}) ${f.fact}`).join("\n") || "(none)"}\n\n`
+    `NEW OR CHANGED FACTS:\n${added.map((f) => `- (${f.since}) ${f.fact}`).join("\n") || "(none)"}\n\n`
         + `NO LONGER STATED:\n${removed.map((f) => `- ${f}`).join("\n") || "(none)"}\n\n`
         + `ALL CURRENT FACTS (context, newest first):\n${current.map((f) => `- (${f.since}) ${f.fact}`).join("\n")}\n\n`
         + `DOCS PAGES:\n\n${catalog}`,
-    }],
-  });
-  if (response.stop_reason === "refusal") throw new Error("planner refused");
-  if (!response.parsed_output) throw new Error("planner returned no parsable plan");
-  return response.parsed_output;
+    { json: PLAN_SCHEMA });
+  try { return JSON.parse(raw); } catch { throw new Error("planner returned no parsable plan"); }
 }
 
 async function rewrite(page, edit, current) {
-  const stream = claude().beta.messages.stream({
-    model: MODEL,
-    max_tokens: 64000,
-    thinking: { type: "adaptive" },
-    output_config: { effort: "high" },
-    ...FALLBACK,
-    system: `You edit one page of docs.agnt.social (Mintlify MDX) so it matches the founder's latest
+  const text = await openai(`You edit one page of docs.agnt.social (Mintlify MDX) so it matches the founder's latest
 official facts. Edit IN PLACE, like a careful human editor:
 
 - Change only what the facts require. Fix the stale sentence where it is; don't append a
@@ -184,17 +202,9 @@ Return ONLY the complete updated file, starting with the frontmatter "---". No c
 
 STYLE GUIDE:
 ${STYLE}`,
-    messages: [{
-      role: "user",
-      content: `WHAT TO CHANGE: ${edit.why}\n\nFACTS TO APPLY:\n${edit.facts.map((f) => `- ${f}`).join("\n")}\n\n`
+    `WHAT TO CHANGE: ${edit.why}\n\nFACTS TO APPLY:\n${edit.facts.map((f) => `- ${f}`).join("\n")}\n\n`
         + `ALL CURRENT FACTS (for consistency):\n${current.map((f) => `- (${f.since}) ${f.fact}`).join("\n")}\n\n`
-        + `PAGE ${page.slug}.mdx:\n${page.source}`,
-    }],
-  });
-  const message = await stream.finalMessage();
-  if (message.stop_reason === "refusal") throw new Error("editor refused");
-  if (message.stop_reason === "max_tokens") throw new Error("editor ran out of room");
-  const text = message.content.filter((b) => b.type === "text").map((b) => b.text).join("");
+        + `PAGE ${page.slug}.mdx:\n${page.source}`);
   // Tolerate a stray code fence around the file.
   const body = text.trim().replace(/^```(?:mdx|md|markdown)?\n/, "").replace(/\n```$/, "");
   return body.endsWith("\n") ? body : `${body}\n`;
@@ -260,7 +270,7 @@ async function main() {
   if (removed.length) {
     lines.push("<details><summary>No longer stated by tut</summary>", "", ...removed.map((f) => `- ${f}`), "", "</details>", "");
   }
-  lines.push("🤖 Generated by docs-oracle with [Claude](https://claude.com/claude-code)");
+  lines.push("🤖 Generated by docs-oracle");
   const bodyFile = path.join(process.env.RUNNER_TEMP || HERE, "pr-body.md");
   fs.writeFileSync(bodyFile, lines.join("\n"));
 

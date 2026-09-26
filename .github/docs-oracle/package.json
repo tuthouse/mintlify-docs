@@ -2,10 +2,8 @@
   "name": "docs-oracle",
   "private": true,
   "type": "module",
-  "description": "Keeps docs.agnt.social in step with tut's announcements; opens a PR.",
-  "scripts": { "update": "node update.mjs" },
-  "dependencies": {
-    "@anthropic-ai/sdk": "^0.128.0",
-    "zod": "^3.25.0"
+  "description": "Keeps docs.agnt.social in step with tut's announcements; opens a PR. No dependencies (plain fetch to OpenAI).",
+  "scripts": {
+    "update": "node update.mjs"
   }
 }
