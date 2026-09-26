@@ -1,11 +1,11 @@
 # docs-oracle: keeps docs.agnt.social in step with tut's announcements.
 #
-# Weekly (or on demand): read the founder oracle's fact sheet from agnt.social; if it changed, Claude edits the
+# Weekly (or on demand): read the founder oracle's fact sheet from agnt.social; if it changed, gpt-5-mini edits the
 # affected pages in place (see .github/docs-oracle/update.mjs), links are checked, and the result
 # lands as ONE rolling PR, "docs-oracle/update", for tut to review and merge. Nothing publishes
 # on its own. While that PR is open, each run builds on top of it, so no earlier edit is lost.
 #
-# Needs: repo secret ANTHROPIC_API_KEY, and Settings → Actions → General →
+# Needs: repo secret OPENAI_API_KEY, and Settings → Actions → General →
 # "Allow GitHub Actions to create and approve pull requests".
 # Only runs on a schedule or by hand, never on pull_request, so fork PRs can't reach the secret.
 name: docs-oracle
@@ -50,13 +50,10 @@ jobs:
         with:
           node-version: 22
 
-      - name: Install
-        run: npm ci --prefix .github/docs-oracle --no-audit --no-fund
-
       - name: Update docs from the latest facts
         id: run
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: node .github/docs-oracle/update.mjs
 
       - name: Check links
