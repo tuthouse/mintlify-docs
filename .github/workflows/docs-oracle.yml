@@ -1,0 +1,89 @@
+# docs-oracle: keeps docs.agnt.social in step with tut's announcements.
+#
+# Weekly (or on demand): read the founder oracle's fact sheet from agnt.social; if it changed, Claude edits the
+# affected pages in place (see .github/docs-oracle/update.mjs), links are checked, and the result
+# lands as ONE rolling PR, "docs-oracle/update", for tut to review and merge. Nothing publishes
+# on its own. While that PR is open, each run builds on top of it, so no earlier edit is lost.
+#
+# Needs: repo secret ANTHROPIC_API_KEY, and Settings → Actions → General →
+# "Allow GitHub Actions to create and approve pull requests".
+# Only runs on a schedule or by hand, never on pull_request, so fork PRs can't reach the secret.
+name: docs-oracle
+
+on:
+  schedule:
+    - cron: "0 14 * * 1" # weekly, Mondays 14:00 UTC (10am ET); or Actions → docs-oracle → Run workflow
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: docs-oracle
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      GH_TOKEN: ${{ github.token }}
+      BRANCH: docs-oracle/update
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Build on the open docs PR, if there is one
+        id: base
+        run: |
+          if [ -n "$(gh pr list --head "$BRANCH" --state open --json number --jq '.[0].number')" ]; then
+            git checkout -B "$BRANCH" "origin/$BRANCH"
+            echo "open=true" >> "$GITHUB_OUTPUT"
+          else
+            git checkout -B "$BRANCH" origin/main
+            echo "open=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install
+        run: npm ci --prefix .github/docs-oracle --no-audit --no-fund
+
+      - name: Update docs from the latest facts
+        id: run
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: node .github/docs-oracle/update.mjs
+
+      - name: Check links
+        if: steps.run.outputs.changed == 'true'
+        run: npx --yes mint@latest broken-links
+
+      - name: Commit, then open or update the PR
+        if: steps.run.outputs.changed == 'true'
+        run: |
+          git config user.name "docs-oracle[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A -- '*.mdx' .github/docs-oracle/state.json
+          git diff --cached --quiet && { echo "nothing to commit"; exit 0; }
+
+          if [ "${{ steps.run.outputs.pages }}" = "0" ] && [ "${{ steps.base.outputs.open }}" = "false" ]; then
+            # No page needed changing: just record the facts as handled, so they aren't re-planned every run.
+            git commit -m "docs-oracle: record latest facts (no page changes)"
+            git push origin "HEAD:main"
+            exit 0
+          fi
+
+          git commit -m "docs-oracle: update docs from tut's announcements"
+          git push --force origin "$BRANCH"
+          if [ "${{ steps.base.outputs.open }}" = "true" ]; then
+            gh pr comment "$BRANCH" --body-file "${{ steps.run.outputs.body_file }}"
+          else
+            gh pr create --base main --head "$BRANCH" \
+              --title "Docs: updates from tut's announcements" \
+              --body-file "${{ steps.run.outputs.body_file }}"
+          fi
