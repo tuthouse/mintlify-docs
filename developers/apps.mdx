@@ -1,0 +1,130 @@
+---
+title: "Apps API (preview)"
+description: "Build an app AGNT users can pick and use with their own AGNT wallet."
+---
+
+<Warning>
+**Preview: in development.** Nothing on this page is live yet. It is the spec builders are building against. Endpoints may still change, and each one is marked live here when it ships.
+</Warning>
+
+The Apps API lets any builder ship an app that AGNT users can pick and use with their own AGNT wallet. AGNT holds the keys. The user approves what the app may do. AGNT signs only actions it can verify. The first app is an **NFT Mint Bot**, and its action, `nft.mint`, is the first one we're building.
+
+## How it works
+
+The app never holds a key: it asks, AGNT checks, AGNT signs.
+
+1. The user opens the app inside AGNT at `agnt.social/apps/<app>`. The app's UI loads in a sandboxed frame from the builder's domain.
+2. The user taps **Connect**. AGNT shows a consent screen with the app's name, the actions it wants and the chains. The user approves.
+3. AGNT gives the app a **user token** for that user and that app only. The user can revoke it any time in AGNT.
+4. The app's backend reads the user's account with that token.
+5. To act, the app's backend sends the transaction it wants to an action endpoint. AGNT checks it against that action's rules and returns it signed, or refuses.
+6. The app broadcasts it and reports the hash. AGNT verifies it on chain and logs it to the user's activity.
+
+## Actions
+
+Every app gets the same three pieces: connect a user, read their account, and request **actions** that AGNT verifies and signs. New use cases add new actions. Raw signing is never offered.
+
+| Action (scope) | What AGNT signs | Status |
+| --- | --- | --- |
+| `account.read` | Nothing: profile, addresses, balances | Building (phase 1) |
+| `nft.mint` | SeaDrop mints into the user's own wallet | Building (phase 2) |
+| `token.swap` | Relay swaps, same engine as AGNT chat | Planned |
+| `token.send` | Sends to an address the user confirmed | Planned |
+| `nft.buy` / `nft.list` | OpenSea fills and listings | Planned |
+
+- **Scopes are per user.** The consent screen lists exactly the actions the app asks for, and the user can untick any of them.
+- **Each action has its own verifier.** Its signing rules and refusal codes are published here, and it's security-reviewed before it goes live.
+- **Read-only data** (agents, tokens, leaderboard, market data) stays in the existing API categories. See [Agents](/developers/agents). Apps use those with the same key.
+
+## Connect a user
+
+Connecting works like OAuth: the user approves in AGNT, and the app gets a revocable user token.
+
+| Step | Call | Notes |
+| --- | --- | --- |
+| 1. Start | Send the user to `https://agnt.social/apps/connect?app=<app_id>&state=<random>` | Inside AGNT's frame, send the bridge message `agnt.connect` instead |
+| 2. Consent | AGNT shows the consent screen | App name, logo, actions, chains and fees |
+| 3. Return | AGNT redirects to your registered `redirect_uri?code=<code>&state=<state>` | `code` lasts 60 seconds and works once. Check `state`. |
+| 4. Exchange | `POST /api/v1/apps/token` with your app key and the `code` | Returns `{ user_token, expires_at, agentId, scopes }` |
+| 5. Refresh | `POST /api/v1/apps/token/refresh` | User tokens last 30 days |
+| 6. Revoke | The user revokes in AGNT, or you call `POST /api/v1/apps/token/revoke` | A revoked token fails with `TOKEN_REVOKED` right away |
+
+Every call sends both your app key (`X-AGNT-Key`) and the user token (`Authorization: Bearer <user_token>`).
+
+## Endpoints
+
+Base URL: `https://api.agnt.social/api/v1`. Responses use the same format as the rest of the API: `{ data, meta: { request_id } }`, and errors come as `{ error: { code, message } }`.
+
+| Method | Path | Does |
+| --- | --- | --- |
+| POST | `/apps/token` | Swap a connect `code` for a user token |
+| POST | `/apps/token/refresh` | Get a new user token for the same grant |
+| POST | `/apps/token/revoke` | End the grant |
+| GET | `/apps/me` | `agentId`, `agentName`, `pfpUrl`, and the user's EVM and Solana addresses |
+| GET | `/apps/me/balances?chain=` | The user's balances |
+| POST | `/apps/nft/mint/sign` | Check a SeaDrop mint and return it signed, or refuse |
+| POST | `/apps/nft/mint/report` | Report the broadcast hash. AGNT verifies it on chain. |
+| GET | `/apps/nft/mints` | This user's mints through your app: status, hash, cost |
+| GET | `/apps/theme` | AGNT's design tokens: colors, type, spacing, light and dark |
+
+## nft.mint rules
+
+AGNT signs only a SeaDrop mint into the user's own wallet. Anything else is refused before any key is used.
+
+`POST /apps/nft/mint/sign` body: `{ chain, to, data, value, gas_limit, max_fee_per_gas, max_priority_fee_per_gas, nonce?, request_id }`
+
+| # | Check | Refused with |
+| --- | --- | --- |
+| 1 | `chain` is `ethereum`, `base` or `robinhood`, and the user granted it | `CHAIN_NOT_ALLOWED` |
+| 2 | `to` is the SeaDrop contract `0x00005EA00Ac477B1030CE78506496e8C2dE24bf5` | `TARGET_NOT_SEADROP` |
+| 3 | `data` decodes as `mintPublic`, `mintSigned` or `mintAllowList`, and nothing else | `FUNCTION_NOT_ALLOWED` |
+| 4 | The minter is zero or the user's own AGNT wallet | `RECIPIENT_NOT_USER` |
+| 5 | `value` equals the mint price × quantity, read on chain by AGNT | `VALUE_MISMATCH` |
+| 6 | The wallet holds `value` × 1.05 plus gas in native ETH | `INSUFFICIENT_NATIVE` |
+| 7 | The gas limit and fees are within bounds | `GAS_OUT_OF_BOUNDS` |
+| 8 | The app's spend protection allows it | `NOT_APPROVED` |
+| 9 | `request_id` hasn't been seen before for this user and app | Returns the first result again |
+
+- On success you get `{ signed_tx, tx_hash }`. Your app broadcasts it whenever it chooses, for example at the moment a drop opens.
+- **No native ETH, no mint.** AGNT never pays user gas, and gas can't be paid in USDC for a pre-signed mint.
+- **Fee:** AGNT takes **5% of the mint value**. It's charged from the user's wallet once the mint is confirmed on chain, and it's shown on the consent screen. Builders set their own pricing on top.
+
+## Frontend: build inside AGNT
+
+Your app's UI runs inside AGNT in a sandboxed frame. It talks to AGNT through a small message bridge and uses AGNT's own design tokens so it looks native.
+
+**The frame.** `agnt.social/apps/<app>` shows AGNT's top bar, then your registered `ui_url` in an iframe. Only registered origins load.
+
+**The bridge** (`window.postMessage`; both sides check `event.origin`):
+
+| Message | Direction | Payload | Answer |
+| --- | --- | --- | --- |
+| `agnt.ready` | app → AGNT | `{ app_id }` | `agnt.context { theme, locale }` |
+| `agnt.connect` | app → AGNT | `{ state }` | `agnt.connected { code, state }` or `agnt.denied` |
+| `agnt.theme` | AGNT → app | `{ mode, tokens }` | Sent on load and on every theme switch |
+| `agnt.toast` | app → AGNT | `{ kind, text }` | AGNT shows its own toast |
+| `agnt.openWallet` | app → AGNT | `{ chain? }` | Opens the AGNT wallet panel |
+| `agnt.resize` | app → AGNT | `{ height }` | The frame grows to fit, with no inner scrollbar |
+
+The user token never travels through the bridge. Your backend swaps the `code` for it server-side.
+
+**AGNT style kit.** `GET /apps/theme` returns the design tokens, and a hosted stylesheet exposes them as CSS variables plus ready-made buttons, inputs, cards, chips, tables and toasts. AGNT's UI rules:
+- no scrollbars ever (if the page scrolls sideways, it's too wide);
+- mobile first at 360 px;
+- numbers in the mono font;
+- amount fields use a decimal keyboard and accept one separator only.
+
+## Errors
+
+| Code | HTTP | Meaning |
+| --- | --- | --- |
+| `KEY_REQUIRED` / `KEY_INVALID` | 401 | Missing or bad app key |
+| `TOKEN_REQUIRED` / `TOKEN_INVALID` / `TOKEN_REVOKED` | 401 | Missing, bad or revoked user token |
+| `SCOPE_DENIED` | 403 | The key or the grant doesn't include this action or chain |
+| Any `nft.mint` refusal above | 422 | The mint was refused by a signing rule |
+| `RATE_LIMITED` | 429 | Slow down. See the `Retry-After` header. |
+| `SIGNER_UNAVAILABLE` | 503 | Nothing was signed. Safe to retry. |
+
+## Getting access
+
+During the preview, AGNT issues app keys and approves each app by hand. Read-only access will become self-serve through a developer portal. Any app that moves money will always need AGNT's approval. To build an app, reach out to the AGNT team.
