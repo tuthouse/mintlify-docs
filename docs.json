@@ -46,8 +46,7 @@
         "group": "Developers",
         "pages": [
           "developers/index",
-          "developers/agents",
-          "developers/apps"
+          "developers/agents"
         ]
       }
     ],
