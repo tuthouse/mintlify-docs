@@ -41,13 +41,6 @@
           "agnts/rewards",
           "agnts/token"
         ]
-      },
-      {
-        "group": "Developers",
-        "pages": [
-          "developers/index",
-          "developers/agents"
-        ]
       }
     ],
     "global": {
