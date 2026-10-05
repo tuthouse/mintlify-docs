@@ -47,6 +47,7 @@
         "pages": [
           "developers/index",
           "developers/agents",
+          "developers/trading",
           "developers/apps"
         ]
       }

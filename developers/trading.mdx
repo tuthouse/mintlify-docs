@@ -1,0 +1,191 @@
+---
+title: "Trading API"
+description: "Let AGNT users buy, sell and tip from their own AGNT wallet inside your bot or app."
+---
+
+The Trading API lets your Telegram bot or app trade for AGNT users from their own AGNT wallet. Your bot names the user and the trade. AGNT checks that user's switch and limits, signs, and returns the result. Your bot never holds a key.
+
+<Info>
+**Live, in beta.** Keys are issued by the AGNT team, and during the beta only allowlisted AGNT accounts can switch a bot on. Ask in the [community](/community).
+</Info>
+
+## Quick start
+
+Base URL `https://api.agnt.social`. Send your key in the `X-AGNT-Partner-Key` header on every request.
+
+<Steps>
+  <Step title="Check the user">
+    ```bash
+    curl -s -X POST https://api.agnt.social/api/partner/v1/whoami \
+      -H 'content-type: application/json' -H "X-AGNT-Partner-Key: $AGNT_KEY" \
+      -d '{"platform":"telegram","platform_user_id":"5512093311"}'
+    ```
+  </Step>
+  <Step title="Place a $5 buy">
+    `external_ref` is your own unique id for this order.
+    ```bash
+    curl -s -X POST https://api.agnt.social/api/partner/v1/orders \
+      -H 'content-type: application/json' -H "X-AGNT-Partner-Key: $AGNT_KEY" \
+      -d '{"platform":"telegram","platform_user_id":"5512093311","side":"buy",
+           "token":"0x2c7a596448f329e3ad35181be4be19d941a682b9","chain":"robinhood",
+           "amount_usd":5,"external_ref":"mybot:chat-118:msg-4471",
+           "fee_recipients":[{"address":"0xYOUR_FEE_WALLET","bps":60}]}'
+    ```
+  </Step>
+  <Step title="If it's pending, ask again">
+    `GET /api/partner/v1/orders/mybot:chat-118:msg-4471`. Never re-send the order.
+  </Step>
+</Steps>
+
+Every response has `status` (`ok`, `not_found`, `throttled` or `error`) and, when not ok, an `error_code`. Branch on those, not on the message text.
+
+<Warning>
+Keep your key on your server. Never put it in client code or a chat. If it leaks, ask us to revoke it and we'll issue a new one.
+</Warning>
+
+## How a user turns your bot on
+
+Your bot can only trade for a user who did both of these on agnt.social. Linking alone never allows a trade.
+
+1. **Link Telegram** on their AGNT profile.
+2. **Switch your bot on** at `https://agnt.social/profile?bot=<your bot id>`: "Allow \<your bot\> to trade for me". The card shows your bot's id and its fee.
+
+Users start at **$25 per trade and $100 per day**. They can change these on the same card, and switch your bot off at any time; that stops every call at once. Send them the link when `whoami` says they aren't linked or switched on.
+
+## Endpoints
+
+Every user-facing call names the user with `platform` (`telegram`) and `platform_user_id` (their Telegram user id).
+
+| Method + path | What it does |
+| --- | --- |
+| `POST /api/partner/v1/whoami` | Linked? switched on? limits and what's left today, wallet, tips allowed |
+| `POST /api/partner/v1/resolve` | A contract, ticker or name → the exact token and chain. Show it before a typed trade |
+| `POST /api/partner/v1/holdings` | The user's AGNT wallet balances (optional `chain` and `token` filters) |
+| `POST /api/partner/v1/orders` | Buy or sell, run to its result |
+| `GET /api/partner/v1/orders/:ref` | One of your orders, by `external_ref` or `order_id` |
+| `POST /api/partner/v1/tips` | Tip another linked user ([Tips](#tips)) |
+| `GET /api/tg/card-data/:chain/:address` | Token card data: market, safety, holders, dex paid. Public, no key |
+
+### whoami
+
+```json
+{
+  "status": "ok", "linked": true, "trading": true,
+  "wallet": "0x7e41…b9d0",
+  "caps": { "per_trade_usd": 25, "daily_usd": 100 },
+  "remaining_today_usd": 75, "tips": false
+}
+```
+
+Not linked → `linked: false`. Linked but not switched on → `trading: false`.
+
+### orders
+
+| Field | Meaning |
+| --- | --- |
+| `side` | `buy` or `sell` |
+| `token` | Contract address (best), ticker or name |
+| `chain` | Optional: `robinhood`, `base`, `ethereum`, `solana`, … when a ticker exists on several chains |
+| `amount_usd` | Dollars to buy or sell |
+| `all` | `true` = sell the whole holding (counts against limits) |
+| `pay_with` / `receive` | Optional: `ETH`, `WETH`, `USDC`, `USDT`, `USDG`, `SOL`. Leave out for AGNT's pick |
+| `slippage_bps` | Optional, 1–300. Leave out for AGNT's auto setting |
+| `external_ref` | Required. Your unique id for this order (max 120 characters) |
+| `fee_recipients` | Your payees, `[{ "address", "bps" }]` ([Fees](#fees)) |
+
+```json
+{
+  "status": "ok", "order_id": "ord_…", "side": "buy",
+  "token": { "address": "0x2c7a…82b9", "chain": "robinhood", "symbol": "AGNTS" },
+  "filled": true, "tx_hash": "0x…", "explorer": "https://…",
+  "bought": "~29,325 AGNTS", "sold": "0.0019 ETH", "sold_usd": 5,
+  "fee_bps": 100, "agnt_fee_bps": 40, "partner_fee_bps": 60
+}
+```
+
+Still confirming → `"filled": false, "pending": true`. Don't re-send; ask for the order. Fee fields are `null` when the route's fee can't be known.
+
+### orders/:ref
+
+Returns `state` (`pending`, `filled` or `failed`), `filled`, `tx_hash`, `explorer`, `bought`, `sold` and `error_code`. A failure adds `retry_safe`, and `partial: true` means money moved but the target wasn't bought.
+
+## Fees
+
+Each trade costs the user AGNT's 0.4% plus your fee on top, up to the ceiling agreed with AGNT for your bot. You set your fee per order in `fee_recipients`: who gets paid and how many basis points each. AGNT adds its own share; you can't change or remove it.
+
+```json
+"fee_recipients": [
+  { "address": "0xCALLER…", "bps": 30 },
+  { "address": "0xGROUP_OWNER…", "bps": 20 },
+  { "address": "0xTREASURY…", "bps": 10 },
+  { "address": "<Solana wallet>", "bps": 60 }
+]
+```
+
+| Route the trade takes | AGNT | Your fee | How you're paid |
+| --- | --- | --- | --- |
+| Relay (most trades, every chain) | 0.4% | Your EVM payees | USDC on Base, accrued at each payee address; withdraw from Relay any time |
+| AGNT Solana engine (new Solana tokens) | 0.4% | Your Solana payees | SOL, in the same transaction |
+| AGNT Robinhood router (new Robinhood launches, stocks) | router rate | Not yet | Coming with a router upgrade |
+| Sell-all orders | 0.4% | None | A user's full exit never carries your fee |
+
+- Only one list applies to a trade, so the EVM list and the Solana list each have their own cap. Send both every time.
+- Over your ceiling: trimmed from your **last** payee, so put the caller first.
+- Up to 5 EVM and 3 Solana payees; extra or malformed entries are dropped.
+- A Solana payee wallet must already hold about 0.00089 SOL (the rent minimum), or it's skipped for that trade. Your fee never breaks the user's trade.
+
+## Rules every order follows
+
+AGNT checks all of these on every call, whatever your bot shows. A refusal never moves money.
+
+- **Limits.** Per-trade and per-day caps are the user's. Pending orders count against the day.
+- **Sell-all.** `all: true` counts at the holding's value against both caps. A token with no price can still be sold in full, at AGNT's default slippage.
+- **Slippage.** `slippage_bps` is 1–300 (3% max).
+- **Paying for a buy.** Buys spend ETH, WETH or USDC (SOL or USDC on Solana) already in the wallet, never the user's other tokens. No funds → `NO_FUNDS`.
+- **No direct route.** Bot orders don't use two-step routing; you get a clean refusal instead.
+- **Price impact.** No one is at a screen to confirm, so a high-impact trade is refused, not sent.
+- **One order per `external_ref`.** Re-sending the same ref returns the first answer (`replay: true`) and never trades twice.
+- **Pending means pending.** Ask `GET /orders/:ref`; never re-send under a new ref. Trust `retry_safe: true` only on a `failed` order.
+- **Rate limit.** 60 requests a minute per key, plus a separate 60 for `GET /orders/:ref`. Over it → `429 RATE_LIMITED`.
+
+## Tips
+
+A tip sends the chain's native coin (ETH, or SOL on Solana) from the tipper's AGNT wallet to the recipient's own AGNT wallet. AGNT looks the recipient's wallet up; you can't name an address.
+
+The tipper needs both switches on: "Allow \<your bot\> to trade for me", and under it "Allow \<your bot\> to send tips". Tips are off by default, and `whoami` returns `tips: true` once they're on. Tips count against the same limits as trades. Your key must also be enabled for tips by AGNT.
+
+```json
+POST /api/partner/v1/tips
+{
+  "platform": "telegram", "platform_user_id": "5512093311",
+  "to_platform_user_id": "9988776655",
+  "chain": "robinhood", "amount_usd": 5,
+  "external_ref": "mybot:tip:chat-118:msg-4480"
+}
+```
+
+`chain` is `robinhood`, `base`, `ethereum` or `solana`. The recipient must have linked Telegram on AGNT. The response is shaped like an order.
+
+## Error codes
+
+Show refusals privately to the person who tapped (in Telegram, `answerCallbackQuery` with `show_alert`), never in the group.
+
+| error_code | Means | Tell the user / do |
+| --- | --- | --- |
+| `NOT_LINKED` | Telegram isn't linked to an AGNT account | Link Telegram at agnt.social/profile |
+| `NOT_AVAILABLE` | Account not in the bot-trading beta yet | Not open to you yet |
+| `TRADING_NOT_ALLOWED` | Your bot isn't switched on for this user | Switch it on at agnt.social/profile?bot=\<your bot id\> |
+| `PER_TRADE_CAP` | Over the per-trade limit (`per_trade_usd`) | Lower the amount, or raise the limit on the card |
+| `DAILY_CAP` | Over what's left today (`remaining_today_usd`) | Lower the amount or wait |
+| `TOKEN_UNRESOLVED` | No token matched | Paste the exact contract address |
+| `NO_FUNDS` / `INSUFFICIENT_FUNDS` | Nothing (or not enough) to pay with on that chain | Add ETH, SOL or USDC to the AGNT wallet |
+| `NO_HOLDING` / `UNPRICED` | Nothing to sell, or no price for a dollar-amount sell | Use `all: true`, or try later |
+| `SLIPPAGE_INVALID` | `slippage_bps` outside 1–300 | Fix the request |
+| `EXTERNAL_REF_REQUIRED` | No `external_ref` | Fix the request |
+| `ORDER_IN_FLIGHT` / `DUPLICATE_SWAP` / `SWAP_IN_PROGRESS` | That order is already running | Don't re-send; ask for the order |
+| `TRADE_FAILED` with `retry_safe: true` | Nothing moved | Safe to try again with a new ref |
+| `TIPS_NOT_ALLOWED` | The user's tips switch is off | Switch on "Allow \<your bot\> to send tips" |
+| `RECIPIENT_NOT_LINKED` | The person being tipped has no AGNT wallet | They link Telegram at agnt.social |
+| `PARTNER_KEY_REQUIRED` / `PARTNER_KEY_INVALID` / `SCOPE_MISSING` | Key missing, wrong or not enabled for this | Check `X-AGNT-Partner-Key`; ask AGNT |
+| `RATE_LIMITED` | Over 60 a minute | Back off and retry |
+| `IDENTITY_UNAVAILABLE` / `PARTNER_LOOKUP_UNAVAILABLE` | AGNT couldn't check right now; nothing was sent | Retry shortly |
