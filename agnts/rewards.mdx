@@ -1,17 +1,24 @@
 ---
 title: "Rewards"
-description: "How activation works and how tier weight decides your share of distributions."
+description: "Holder rewards in USDG, paid daily to activated AGNTS by tier weight, one season at a time."
 ---
 
-Activation makes a piece eligible for the protocol's fee distribution. Each payout is split across activated pieces by tier weight.
+Activated AGNTS earn a share of the protocol's fees, **paid in USDG** straight to the wallet that holds each piece. Rewards run in monthly **seasons**, and each payout is split across activated pieces by tier weight.
 
 <Note>
-Activation is a **cost**, not a reward stream. What you pay to activate is burned or goes to treasury — none of it is paid out to other holders. See [\$AGNTS &amp; the Vault](/agnts/token) for what it costs.
+**Season 0 is live.** 11,000 USDG is paying out over 30 days, Oct 5 → Nov 4 2026, to every AGNT that was activated when Season 0 closed (Oct 5, midnight EDT) and is still activated.
 </Note>
 
-<Note>
-Activation is **live**. Reward distributions have **not started yet**. The weights below are final.
-</Note>
+## Seasons
+
+Each season pays out a fixed pot evenly over 30 days. Fees earned during one season build the next.
+
+| Season | Pot | Runs | Who earns |
+|---|---|---|---|
+| **Season 0** | 11,000 USDG | Oct 5 → Nov 4 | AGNTS activated before Oct 5, midnight EDT (04:00 UTC) |
+| **Season 1** | 2,014 USDG carried over + 70% of every fee from Oct 5 on | Nov 4 → Dec 4 | Activated AGNTS |
+
+Season 0 pays out what holders earned before it launched. **Activate now and you earn from Season 1.**
 
 ## Weight by tier
 
@@ -24,82 +31,73 @@ Activation is **live**. Reward distributions have **not started yet**. The weigh
 
 The weights run steeper than the tier ratios. Five Commons stake 5; one Rare stakes 6. A Rare's weight (6) is higher than the combined weight of the five Commons burned to draw it (5), and the same holds at every rung. Otherwise a burn would leave your share unchanged.
 
-Each tier's share of the pool is *derived* — activated count × weight, over the total — and recalculated **every week**. It is never a fixed percentage set at launch.
-
-## Activation does not survive a sale
-
-**Sell an activated piece and it switches off.** The collection counts every time a piece changes
-hands, so the moment it leaves your wallet the activation resets and any share you had not yet
-claimed is forfeited to everyone still activated.
-
-Two consequences:
-
-- **Claim before you sell.** Unclaimed amounts do not travel with the piece and are not recoverable.
-- **Buying an activated piece buys you nothing.** It arrives switched off. If you want it active,
-  you activate it yourself and pay the cost yourself.
-
-Burning works the same way. The pieces you burn are destroyed along with their activation, and the
-piece you draw from the vault comes back inactive — see [Burning &amp; the Ladder](/agnts/burns).
-
-## Where the fees come from
-
-When distributions go live, the pool will be funded by 70% of the fee streams listed below and nothing else. The remaining 30% goes to the protocol treasury. **Nothing has been distributed to date.**
-
-| Stream | Rate | Fee collected today? |
-|---|---|---|
-| Secondary sales | 5% | Live |
-| Curated launches | 0.4% | Live |
-| Vault swaps — random | 5% | Live |
-| Vault swaps — pick your own | 15% | Live |
-
-
-
-Separately, **1.095% on \$AGNTS trades goes 100% to the protocol**, with none of it entering the pool. Burns pay no fee at all.
-
-Fees collected before distributions go live are retained by the treasury and are not distributed retroactively.
-
 ## How your share is worked out
 
-Your share of a payout is your weight divided by the total weight of everything activated.
+Your share is your weight divided by the total weight of everything earning in the season.
 
 ```text
 your share  =  your weight  ÷  total activated weight
 ```
 
-Nothing more to it. If you hold an activated Epic and the total activated weight across the
-collection is 1,699, your share is 21 out of 1,699 — about 1.2% of whatever is paid out that week.
+Season 0 has a total weight of 2,706. A Legendary (55) earns 55 ÷ 2,706 of the season's 366.67 USDG a day — about 7.45 USDG a day. A Common (1) earns about 0.14 USDG a day.
 
-### Worked example
+Shares move only as pieces leave: when one sells or deactivates, the rest of the season is split across everyone still earning.
 
-Say these are activated:
+## How you get paid
 
-| Tier | Activated | Weight each | Total weight | Share of the pool |
-|---|---|---|---|---|
-| Common | 1,169 | 1× | 1,169 | 69% |
-| Rare | 28 | 6× | 168 | 10% |
-| Epic | 12 | 21× | 252 | 15% |
-| Legendary | 2 | 55× | 110 | 6% |
-| | | | **1,699** | **100%** |
+- **Automatically, every day.** A keeper pays out once at least 0.05 USDG has built up. You don't need to claim.
+- **To the holder.** Payouts go to the wallet that holds the NFT — never to the agent's own wallet. Anyone can trigger a payout, but it can only ever go to the holder.
+- **On chain.** The rewards contract on Robinhood Chain is `0x649e378764d2131Ad7f1bcC7EEDAbbC8A9406840`.
 
-Commons take the largest share because there are far more of them, while a single
-Legendary carries 55× the weight of a single Common.
+## Selling, moving and deactivating
 
-These shares are **worked out from the numbers, not fixed in advance** — they move as pieces are activated and deactivated, and
-they are recalculated every week.
+**Sell or move an activated piece and it stops earning.** The collection counts every time a piece changes hands. The moment it leaves your wallet, anything it earned since its last payout is forfeited to everyone still activated. What was already paid out is yours.
 
-<Note>
-What gets paid out depends entirely on how much activity there was that week. There is no fixed rate, no
-guaranteed amount, and no promised outcome — if there is no activity, there is nothing to
-distribute. Nothing here is a projection or a forecast.
-</Note>
+- **Buying an activated piece buys you nothing.** It arrives switched off. Activate it yourself and it earns from the next season.
+- **Deactivate** and you're paid everything earned up to the last hourly check-in, then it stops.
+
+Burning works the same way. The pieces you burn are destroyed along with their activation, and the piece you draw from the vault comes back inactive — see [Burning &amp; the Ladder](/agnts/burns).
+
+## Where the fees come from
+
+70% of these fee streams goes to holders. The other 30% goes to the protocol treasury.
+
+| Stream | What's counted |
+|---|---|
+| Secondary sales | 5% royalty on every sale |
+| Activations | the ETH activation fee |
+| Vault swaps | the swap fee (5% random, 15% pick your own) |
+| Degen swaps | the fee only |
+| \$AGNTS buy engine | buy and sell fees |
+| Curated launches | the protocol's 0.4% — from Season 1 |
+
+The \$AGNTS part of the activation cost is not counted: half is burned and half goes to treasury. Separately, **1.095% on \$AGNTS pool trades goes 100% to the protocol** and none of it enters the pool. Burns pay no fee.
+
+## Season 0 \$AGNTS bonus
+
+On top of the USDG, every AGNT activated for Season 0 gets a one-time \$AGNTS bonus:
+
+| Tier | Bonus |
+|---|---|
+| Common | 50,000 \$AGNTS |
+| Rare | 100,000 \$AGNTS |
+| Epic | 200,000 \$AGNTS |
+| Legendary | 400,000 \$AGNTS |
+
+- **It unlocks in full on Nov 4.** Nothing is paid before then; the whole bonus is paid at once, to the wallet that holds the piece.
+- **Hold and stay activated for the 30 days.** Sell, move or deactivate the piece before Nov 4 and its bonus goes back to the pool.
+- **One bonus per NFT, ever.**
 
 ## What affects your share
 
 - **Your tier** — a higher tier carries more weight
-- **How many others activate** — more activated weight means a smaller slice each
-- **Protocol activity** — the pool is whatever fees came in
+- **How many others earn** — more activated weight means a smaller slice each
+- **Protocol activity** — each season's pot is whatever fees came in
+
+<Note>
+What a future season pays depends entirely on how much activity there was. There is no fixed rate, no guaranteed amount and no promised outcome — if there is no activity, there is nothing to distribute. Nothing here is a projection or a forecast.
+</Note>
 
 <Warning>
-AGNTS are collectibles. Activation is a mechanic within the collection, not an investment, and
-nothing on this page should be read as a return, a yield, or a promise of any payment.
+AGNTS are collectibles. Activation is a mechanic within the collection, not an investment, and nothing on this page should be read as a return, a yield, or a promise of any payment.
 </Warning>
