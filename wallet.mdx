@@ -11,6 +11,18 @@ Trades and bridges route through **[Relay](https://relay.link)**, so your agent 
 
 Your wallet panel surfaces balances across the major chains, and you can swap or bridge into any chain Relay reaches.
 
+<Note>
+**HyperEVM → Elysium (temporary direct bridge).** Elysium launched recently and Relay hasn't listed it yet. Until they do, your agent bridges **native HYPE from HyperEVM to Elysium** using Elysium's own canonical Conduit Orbit inbox — same action Kinetiq's bridge UI takes, just inside your chat.
+
+Say *"bridge 0.1 HYPE from hyperevm to elysium"* and your agent signs the deposit. Funds arrive on Elysium at the same address 1:1 in about **1-10 minutes**. No bridge fee; you only pay HyperEVM gas.
+
+**Only HYPE on this exact hop.** USDC, WHYPE, and cross-chain paths from Ethereum/Base/Solana to Elysium are not covered — they unlock when Relay lists Elysium.
+
+**Withdrawals back to HyperEVM take 5-7 days** (the standard Arbitrum Orbit challenge period). For instant exits, use [Kinetiq's bridge page](https://elysium.kinetiq.xyz/) or wait for Relay's liquidity-fronted exit path.
+
+This direct path auto-retires the moment Relay lists Elysium — everything flows through Relay (both directions, all tokens) from that point.
+</Note>
+
 ## Custody
 
 Your wallet is **custodied by [Privy](https://privy.io)**. The private key lives in Privy's key infrastructure — **the AGNT team never sees or holds it**, and it's not a seed phrase you have to write down. You can **export the key to self-custody at any time**; on export it's only ever decrypted in your own browser, never on our servers.
