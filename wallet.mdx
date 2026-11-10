@@ -7,21 +7,43 @@ Your agent comes with a wallet built in. It's created for you on sign-in — no 
 
 ## Chains
 
-Trades and bridges route through **[Relay](https://relay.link)**, so your agent can move assets across the major EVM chains — **Base, Ethereum, Robinhood Chain, Arbitrum, Optimism, Polygon** and more — plus **Solana**. Coverage varies a little by action: swapping reaches more chains than launching does.
+Trades and bridges route through **[Relay](https://relay.link)**, so your agent can move assets across the major EVM chains — **Base, Ethereum, Robinhood Chain, Arbitrum, Optimism, Polygon, HyperEVM, Elysium** and more — plus **Solana**. Coverage varies a little by action: swapping reaches more chains than launching does.
 
 Your wallet panel surfaces balances across the major chains, and you can swap or bridge into any chain Relay reaches.
 
-<Note>
-**HyperEVM → Elysium (temporary direct bridge).** Elysium launched recently and Relay hasn't listed it yet. Until they do, your agent bridges **native HYPE from HyperEVM to Elysium** using Elysium's own canonical Conduit Orbit inbox — same action Kinetiq's bridge UI takes, just inside your chat.
+## Elysium
 
-Say *"bridge 0.1 HYPE from hyperevm to elysium"* and your agent signs the deposit. Funds arrive on Elysium at the same address 1:1 in about **1-10 minutes**. No bridge fee; you only pay HyperEVM gas.
+Trading on **Elysium** is live. Your agent can buy and sell tokens on Elysium, and swap or bridge between Elysium and other chains. Gas on Elysium is paid in **HYPE**.
 
-**Only HYPE on this exact hop.** USDC, WHYPE, and cross-chain paths from Ethereum/Base/Solana to Elysium are not covered — they unlock when Relay lists Elysium.
+```text
+buy 0.1 HYPE of <token address> on elysium
+```
 
-**Withdrawals back to HyperEVM take 5-7 days** (the standard Arbitrum Orbit challenge period). For instant exits, use [Kinetiq's bridge page](https://elysium.kinetiq.xyz/) or wait for Relay's liquidity-fronted exit path.
+**Which tokens you can trade.** A trade goes one of two ways, and your agent picks for you:
 
-This direct path auto-retires the moment Relay lists Elysium — everything flows through Relay (both directions, all tokens) from that point.
-</Note>
+- **New tokens (trading for under about a week)** go through AGNT's own router, straight against the token's pool. This is what makes brand-new launches tradable in the first minutes.
+- **Older tokens**, and every swap between Elysium and another chain, go through Relay.
+
+For new tokens, AGNT's router covers:
+
+| Where the token launched | Covered |
+|---|---|
+| Montra | Yes |
+| Ascend | Yes |
+| A standard Uniswap V4 pool (no custom hook, a standard fee tier) | Yes |
+| Another launchpad that runs its own custom pool logic | Not yet |
+
+If there is no route for a token, your agent tells you it can't fill the trade, and nothing is sent.
+
+**Fee traps are refused.** Some Elysium pools charge 80% or more on every trade. Your agent refuses to buy a token when every pool it has charges more than 10%.
+
+<Warning>
+Elysium has many look-alike tokens that copy a real token's name and picture. Trade by **contract address**, and check the address against the project's own official links before you buy.
+</Warning>
+
+**Bridging HYPE in from HyperEVM.** Say *"bridge 0.1 HYPE from hyperevm to elysium"*. Native HYPE on this one hop goes through Elysium's own canonical bridge: it arrives at the same address, 1:1, in about **1-10 minutes**, with no bridge fee beyond HyperEVM gas. Everything else to or from Elysium goes through Relay.
+
+**Withdrawing through the canonical bridge takes 5-7 days** (the standard challenge period for this kind of chain). To move funds out of Elysium faster, swap or bridge out through Relay instead.
 
 ## Custody
 
