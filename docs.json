@@ -35,6 +35,7 @@
       {
         "group": "Guides",
         "pages": [
+          "guides/add-agnt-to-claude",
           "guides/swap-on-robinhood-chain"
         ]
       },

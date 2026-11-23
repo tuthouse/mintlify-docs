@@ -1,0 +1,107 @@
+---
+title: "Add AGNT to Claude"
+description: "Connect your AGNT wallet to Claude with the AGNT connector: see your wallet, token cards and activity inside a Claude chat."
+---
+
+**Short answer:** AGNT is a crypto wallet connector for Claude. Add it as a custom connector with the address `https://api.agnt.social/mcp`, sign in with AGNT, and Claude can show your wallet, token cards and recent activity in the chat. The wallet appears as an AGNT panel with **Buy** and **Sell** buttons that you tap yourself.
+
+## What you need
+
+- An AGNT account. Sign in at [agnt.social](https://agnt.social) and your agent and wallet are created for you.
+- A Claude account at [claude.ai](https://claude.ai). If you don't see **Add custom connector** in step 2, your Claude plan doesn't include custom connectors.
+
+## Connect
+
+<Steps>
+  <Step title="Open your plugins in Claude">
+    In Claude, open **Plugins** in the sidebar, or go to [claude.ai/plugins/yours](https://claude.ai/plugins/yours).
+  </Step>
+  <Step title="Choose Add custom connector">
+    Tap **Add**, then **Add custom connector**.
+  </Step>
+  <Step title="Fill in the two boxes">
+    **Name:** `AGNT`
+
+    **MCP server URL:**
+
+    ```text
+    https://api.agnt.social/mcp
+    ```
+
+    Tap **Continue** and finish the second step.
+  </Step>
+  <Step title="Sign in with AGNT">
+    Claude sends you to AGNT. Sign in and tap **Allow**. AGNT then shows under **Connectors** in your plugins as a custom connector on `api.agnt.social`.
+  </Step>
+  <Step title="Try it">
+    Start a new chat and say `show my AGNT wallet`. The first time, Claude asks whether it may use AGNT: choose **Allow once** or **Always allow**.
+  </Step>
+</Steps>
+
+<Note>
+  Claude labels AGNT a custom connector, because you added it yourself rather than from Claude's directory. That is expected.
+</Note>
+
+## Things you can say
+
+```text
+show my AGNT wallet
+what is in my wallet on robinhood chain
+show me the AGNTS token
+what did my wallet do this week
+what are the official AGNT addresses
+what's new on AGNT
+```
+
+## What AGNT can do in Claude
+
+| | In Claude |
+| - | - |
+| Show your wallet, with balances across chains | Yes |
+| Show a token's card and price | Yes |
+| Show recent activity and rewards | Yes |
+| Look up official AGNT addresses and updates | Yes |
+| Buy or sell from the AGNT panel, by tapping the buttons yourself | Yes, within limits you set |
+| Claude buying, selling or sending for you by itself | No |
+
+**Claude is read only.** Claude itself never buys, sells or sends for you. That is Claude's own rule, and no setting in AGNT changes it. Trades in Claude happen only when you tap **Buy** or **Sell** in the AGNT panel.
+
+## Trading from the panel
+
+The buttons are off until you switch them on:
+
+1. Open [agnt.social/apps/claude](https://agnt.social/apps/claude) and sign in.
+2. Set the most you allow per trade and per day.
+3. Tap **Let Claude trade**.
+
+If that page says trading isn't open for your account yet, everything else on this page still works.
+
+You can change the limits or stop trading there at any time. Stopping only turns off trading: Claude stays connected and can still show your wallet.
+
+## If something looks wrong
+
+- **Claude doesn't use AGNT.** Name it: start your message with "Use the AGNT connector".
+- **A new AGNT feature is missing.** In your plugins, open the **...** menu next to AGNT and choose **Refresh tools list**, then start a new chat.
+- **The wallet panel doesn't open.** Start a new chat and ask again. If Claude asks for permission, allow it.
+
+## Common questions
+
+### Is there a crypto wallet connector for Claude?
+
+Yes. AGNT connects to Claude through the address `https://api.agnt.social/mcp`. It signs in with your AGNT account, so there is no API key to copy.
+
+### Does Claude get my private key?
+
+No. Claude never sees a key. The wallet is custodied by [Privy](https://privy.io), and the AGNT team never sees or holds the key either. See [Custody](/wallet#custody).
+
+### Can Claude spend my money?
+
+Not by itself. Claude refuses to place trades or sends. A trade only happens when you tap a button in the AGNT panel, and only within the limits you set.
+
+### Does it cost anything to connect?
+
+Connecting is free. Trades carry the normal AGNT fee and network gas. See [fees](/wallet#fees).
+
+### How do I disconnect?
+
+Remove AGNT from your plugins in Claude. To stop trading but stay connected, switch it off at [agnt.social/apps/claude](https://agnt.social/apps/claude).
