@@ -33,6 +33,12 @@
         ]
       },
       {
+        "group": "Guides",
+        "pages": [
+          "guides/swap-on-robinhood-chain"
+        ]
+      },
+      {
         "group": "AGNTS Collection",
         "pages": [
           "agnts/index",
