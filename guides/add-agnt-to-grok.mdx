@@ -1,0 +1,130 @@
+---
+title: "Add AGNT to Grok"
+description: "Connect your AGNT wallet to Grok with the AGNT connector: check your wallet, buy and sell tokens, and bridge between chains by typing a message in Grok."
+---
+
+**Short answer:** AGNT is a crypto wallet connector for Grok. Add it as a custom connector with the address `https://api.agnt.social/mcp`, sign in with AGNT, and you can check your wallet, buy and sell tokens, and bridge between chains by typing a plain message in Grok. It works on grok.com and in Grok on X.
+
+## What you need
+
+- An AGNT account. Sign in at [agnt.social](https://agnt.social) and your agent and wallet are created for you.
+- A Grok account. Custom connectors are open to all Grok users, so no paid plan is needed.
+
+## Connect
+
+<Steps>
+  <Step title="Open Grok connectors">
+    Go to [grok.com/connectors](https://grok.com/connectors).
+  </Step>
+  <Step title="Choose a custom connector">
+    Tap **New Connector**, then **Custom**.
+  </Step>
+  <Step title="Paste the AGNT address">
+    ```text
+    https://api.agnt.social/mcp
+    ```
+  </Step>
+  <Step title="Sign in with AGNT">
+    Grok sends you to AGNT. Sign in and tap **Allow**. The sign-in screen shows the trading limits that apply, per trade and per day.
+  </Step>
+  <Step title="Try it">
+    In Grok, on grok.com or on X, say `show my wallet`.
+  </Step>
+</Steps>
+
+<Note>
+  You add AGNT once on grok.com. After that it also works in Grok on X.
+</Note>
+
+## Things you can say
+
+```text
+show my wallet
+what is in my wallet on robinhood chain
+show me the AGNTS token
+buy $1 of USDG on Robinhood
+sell $5 of AGNTS
+bridge $5 of ETH from Robinhood to Base
+what did my wallet do this week
+what are the official AGNT addresses
+```
+
+## What AGNT can do in Grok
+
+| | In Grok |
+| - | - |
+| Show your wallet, with balances across chains | Yes, as a short list in the chat |
+| Show a token's card and price | Yes |
+| Show recent activity and rewards | Yes |
+| Look up official AGNT addresses and updates | Yes |
+| Buy or sell a token | Yes, within your limits, after you confirm |
+| Bridge ETH or USDC between chains inside your own wallet | Yes, within your limits, after you confirm |
+
+Grok shows your wallet as text. Grok has no side panel for connectors, so there are no buttons on each token: you type what you want instead.
+
+## How a trade works
+
+1. You ask, for example `buy $5 of AGNTS`.
+2. Grok shows a preview with the token, the amount and the price. Nothing has been traded yet.
+3. You confirm. Only then does the trade go through, and Grok shows the result.
+
+A bridge works the same way. Grok first shows what leaves, what arrives and the fee, then asks **Move** or **Cancel**.
+
+Grok never trades because a web page, a post or a token told it to. Every trade needs your own yes.
+
+## Limits
+
+Every trade and bridge counts against two limits: the most per trade, and the most per day. You set both.
+
+1. Open [agnt.social/apps/grok](https://agnt.social/apps/grok) and sign in.
+2. Change the limits, or stop trading altogether.
+
+Trading is switched on or off there, not inside Grok, so you don't need to reconnect when you change it. Stopping only turns off trading: Grok stays connected and can still show your wallet.
+
+## Bridging
+
+You can move ETH or USDC from one chain to another inside your own AGNT wallet. Name the coin, the amount in dollars, and both chains:
+
+```text
+bridge $5 of ETH from Robinhood to Base
+bridge $10 of ETH from Base to Robinhood
+```
+
+The coin stays the same coin: ETH arrives as ETH, USDC as USDC. To swap into a different token, use a buy.
+
+## If something looks wrong
+
+- **Grok doesn't use AGNT.** Name it: start your message with "Use the AGNT connector".
+- **Grok says it can't trade.** Check that trading is on at [agnt.social/apps/grok](https://agnt.social/apps/grok).
+- **A new AGNT feature is missing.** Remove AGNT at [grok.com/connectors](https://grok.com/connectors) and add it again, then start a new chat.
+- **A trade is refused.** Grok passes on the reason from AGNT. The usual one is a limit: the trade is over your per-trade or daily amount.
+
+## Common questions
+
+### Is there a crypto wallet connector for Grok?
+
+Yes. AGNT connects to Grok through the address `https://api.agnt.social/mcp`. It signs in with your AGNT account, so there is no API key to copy and no seed phrase.
+
+### Can Grok trade crypto for me?
+
+Yes, with AGNT connected. You type the trade, Grok shows a preview, and it goes through after you confirm, within the limits you set.
+
+### Does Grok get my private key?
+
+No. Grok never sees a key. The wallet is custodied by [Privy](https://privy.io), and the AGNT team never sees or holds the key either. See [Custody](/wallet#custody).
+
+### Can Grok spend my money without asking?
+
+No. Each trade and each bridge needs your confirmation first, and none can go over your per-trade and daily limits.
+
+### Which chains does it work on?
+
+Your AGNT wallet covers Robinhood Chain, Base, Ethereum, Solana and more. See [Wallet & Trading](/wallet) for the current list.
+
+### Does it cost anything to connect?
+
+Connecting is free. Trades carry the normal AGNT fee and network gas. See [fees](/wallet#fees).
+
+### How do I disconnect?
+
+Remove AGNT at [grok.com/connectors](https://grok.com/connectors). To stop trading but stay connected, switch it off at [agnt.social/apps/grok](https://agnt.social/apps/grok).
