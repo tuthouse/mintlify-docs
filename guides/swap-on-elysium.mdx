@@ -1,0 +1,87 @@
+---
+title: "Swap on Elysium by chatting with an AI"
+description: "Swap tokens on Elysium by typing a plain message to your AGNT agent. No seed phrase, no extension, no exchange screen."
+---
+
+**Short answer:** AGNT ([agnt.social](https://agnt.social)) lets you buy and sell tokens on Elysium by typing a plain message, such as `buy 0.1 HYPE of <token address> on elysium`. Every AGNT account comes with an AI agent and a built-in wallet that works on Elysium. You say what you want, your agent does the on-chain work, and you get a card with the result.
+
+## How it works
+
+<Steps>
+  <Step title="Sign in">
+    Open [agnt.social](https://agnt.social) and sign in. Your agent and its wallet are created for you. There is no seed phrase to write down and no extension to install.
+  </Step>
+  <Step title="Fund the wallet">
+    Put some HYPE on Elysium in your agent's wallet. The simplest way is to ask your agent: `bridge 0.1 HYPE from hyperevm to elysium`. It arrives at the same address, 1:1, in about 1-10 minutes.
+  </Step>
+  <Step title="Type the swap">
+    Say what you want in plain words. You can name the token or paste its contract address.
+  </Step>
+  <Step title="Confirm on the card">
+    Your agent shows a **Buy / Sell card** with the quote and the live USD value. Confirm, and the result comes back as a receipt with the transaction link.
+  </Step>
+</Steps>
+
+## Things you can say
+
+```text
+buy 0.1 HYPE of <token address> on elysium
+sell half of <token address> on elysium
+bridge 0.1 HYPE from hyperevm to elysium
+what is in my wallet on elysium
+```
+
+<Tip>
+  Trade by **contract address** when you can. Token names are easy to copy; an address is not.
+</Tip>
+
+## Where you can do it
+
+- **In AGNT chat** at [agnt.social](https://agnt.social).
+- **Inside the AI apps you already use.** The same agent and wallet open inside ChatGPT, Claude and Grok. Setup for each one is at [agnt.social/apps](https://agnt.social/apps).
+
+## What it costs
+
+The AGNT fee is built into the quote, so the amount on the card is what you get. Network gas on Elysium is paid in HYPE from your wallet. Chatting uses [credits](/credits); swapping does not. Current rates are in [Wallet & Trading](/wallet#fees).
+
+## Elysium on AGNT
+
+- Gas on Elysium is paid in **HYPE**.
+- **New tokens** (trading for under about a week) go through AGNT's own router, straight against the token's pool. That is what makes a new launch tradable in its first minutes. It covers tokens launched on Montra, on Ascend, and in a standard Uniswap V4 pool.
+- **Older tokens**, and every swap between Elysium and another chain, go through [Relay](https://relay.link).
+- **Fee traps are refused.** Some Elysium pools charge 80% or more on every trade. Your agent refuses to buy a token when every pool it has charges more than 10%.
+- Full details are in [Wallet & Trading](/wallet#elysium).
+
+<Warning>
+  Elysium has many look-alike tokens that copy a real token's name and picture. Trade by **contract address**, and check the address against the project's own official links before you buy.
+</Warning>
+
+## Common questions
+
+### Do I need MetaMask or another wallet?
+
+No. The wallet is built into your agent and is created when you sign in. There is no seed phrase to write down and no extension to install.
+
+### Who holds the keys?
+
+The wallet is custodied by [Privy](https://privy.io). The AGNT team never sees or holds the private key, and you can export it to self-custody at any time. See [Custody](/wallet#custody).
+
+### Does the AI trade without asking me?
+
+A swap in chat shows you a card with the quote first. It runs when you confirm.
+
+### Which tokens can I trade on Elysium?
+
+Tokens launched on Montra or Ascend, tokens in a standard Uniswap V4 pool, and older tokens that Relay can route. A token on another launchpad that runs its own custom pool logic is not covered yet. If there is no route, your agent tells you it can't fill the trade and nothing is sent.
+
+### How do I get HYPE onto Elysium?
+
+Ask your agent to bridge it from HyperEVM. Native HYPE on that hop goes through Elysium's own bridge, with no bridge fee beyond HyperEVM gas. Moving funds back out through that bridge takes 5-7 days, so to leave faster, swap or bridge out through Relay instead.
+
+### Can I move my funds out?
+
+Yes. Ask your agent to send to an address, or to bridge to another chain.
+
+## Start
+
+Open [agnt.social](https://agnt.social), sign in, and type your first swap.

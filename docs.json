@@ -37,7 +37,14 @@
         "pages": [
           "guides/add-agnt-to-grok",
           "guides/add-agnt-to-claude",
-          "guides/swap-on-robinhood-chain"
+          "guides/bridge-from-grok-chatgpt-claude",
+          "guides/check-a-token-from-grok-or-claude",
+          "guides/swap-on-robinhood-chain",
+          "guides/swap-on-base",
+          "guides/swap-on-elysium",
+          "guides/swap-on-hyperevm",
+          "guides/own-an-on-chain-ai-agent",
+          "guides/is-an-ai-agent-wallet-safe"
         ]
       },
       {
