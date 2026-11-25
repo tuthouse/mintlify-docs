@@ -1,0 +1,86 @@
+---
+title: "Bridge crypto from Grok, ChatGPT or Claude"
+description: "Move ETH or USDC from one chain to another inside your own wallet, from Grok, ChatGPT or Claude, with the AGNT connector."
+---
+
+**Short answer:** With AGNT connected, you can bridge ETH or USDC between chains from inside Grok, ChatGPT or Claude. In Grok you type it, for example `bridge $5 of ETH from Robinhood to Base`, and confirm. In ChatGPT and Claude the AGNT wallet panel opens and you tap **Move**. The coin moves between chains inside your own AGNT wallet; nothing goes to another person.
+
+## What you can bridge
+
+| Coin | Between these chains |
+| - | - |
+| ETH | Ethereum, Base, Robinhood Chain, Arbitrum, Optimism |
+| USDC | Base, Ethereum, Polygon, Arbitrum, Solana |
+
+The coin stays the same coin: ETH arrives as ETH, USDC as USDC. To end up with a different token, use a buy instead.
+
+## How it works in each app
+
+| | How you bridge | What confirms it |
+| - | - | - |
+| Grok | Type the move in the chat | Grok shows what leaves, what arrives and the fee, then you answer **Move** or **Cancel** |
+| ChatGPT | Type the move, or tap **bridge** in the AGNT panel | The panel opens with the move filled in. You tap **Move** |
+| Claude | Ask for it, or tap **bridge** in the AGNT panel | The panel opens. You tap **Move** |
+
+In every app, nothing moves until you confirm it yourself.
+
+## Set it up
+
+<Steps>
+  <Step title="Get an AGNT account">
+    Sign in at [agnt.social](https://agnt.social). Your agent and its wallet are created for you.
+  </Step>
+  <Step title="Connect AGNT to your AI app">
+    Follow the steps for [Grok](/guides/add-agnt-to-grok) or [Claude](/guides/add-agnt-to-claude). ChatGPT's steps are at [agnt.social/apps](https://agnt.social/apps).
+  </Step>
+  <Step title="Ask for the bridge">
+    Name the coin, the amount in dollars, and both chains.
+  </Step>
+</Steps>
+
+## Things you can say
+
+```text
+bridge $5 of ETH from Robinhood to Base
+bridge $10 of ETH from Base to Robinhood
+move $20 of USDC from Base to Solana
+bridge $25 of USDC from Ethereum to Arbitrum
+```
+
+## What it costs
+
+A little less arrives than leaves: the AGNT fee and the bridge's own fee come out of the amount. The preview shows both sides before you confirm. Current rates are in [Wallet & Trading](/wallet#fees).
+
+## Limits
+
+A bridge counts against the same two limits as a buy: the most per move, and the most per day. You set both for each AI app at [agnt.social/apps](https://agnt.social/apps), and you can switch trading off there at any time.
+
+## Common questions
+
+### Can Grok bridge crypto for me?
+
+Yes, with AGNT connected. You type the move, Grok shows a preview, and it goes through after you answer **Move**.
+
+### Can ChatGPT bridge crypto for me?
+
+With AGNT connected, ChatGPT opens the AGNT wallet panel with the move filled in. You tap **Move** in the panel. ChatGPT itself never moves the funds.
+
+### Can Claude bridge crypto for me?
+
+With AGNT connected, Claude opens the AGNT wallet panel, and you tap **bridge** and then **Move**. Claude itself may decline to place the move in chat; the panel is the way to do it.
+
+### Where does the money go?
+
+To the same wallet on the other chain. A bridge here is always from your own AGNT wallet to your own AGNT wallet.
+
+### What if I name a coin or chain that can't be bridged?
+
+AGNT says so and nothing is moved. Only ETH and USDC bridge this way, on the chains in the table above.
+
+### Does the AI app get my private key?
+
+No. The wallet is custodied by [Privy](https://privy.io), and neither the AI app nor the AGNT team sees or holds the key. See [Custody](/wallet#custody).
+
+## Start
+
+Sign in at [agnt.social](https://agnt.social), connect AGNT at [agnt.social/apps](https://agnt.social/apps), and ask for your first bridge.

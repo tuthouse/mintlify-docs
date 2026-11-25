@@ -1,0 +1,81 @@
+---
+title: "Check a token's price from Grok or Claude"
+description: "Ask Grok or Claude for a token's price, market cap, liquidity, holders and safety checks, with the AGNT connector."
+---
+
+**Short answer:** With AGNT connected, you can ask Grok or Claude about any token by name or contract address and get its price, 24-hour chart, market cap, liquidity, volume, holders and safety checks. It works for tokens on Robinhood Chain, Base, Solana and Ethereum. Looking up a token moves no money.
+
+## Set it up
+
+<Steps>
+  <Step title="Get an AGNT account">
+    Sign in at [agnt.social](https://agnt.social). Your agent and its wallet are created for you.
+  </Step>
+  <Step title="Connect AGNT">
+    Follow the steps for [Grok](/guides/add-agnt-to-grok) or [Claude](/guides/add-agnt-to-claude). The connector address is the same for both:
+
+    ```text
+    https://api.agnt.social/mcp
+    ```
+  </Step>
+  <Step title="Ask about a token">
+    Name it, or paste its contract address.
+  </Step>
+</Steps>
+
+## Things you can say
+
+```text
+show me the AGNTS token
+what is the price of 0x2c7a596448f329e3ad35181be4be19d941a682b9 on robinhood
+analyze this token on base: <token address>
+is <token address> on solana safe to buy
+show my wallet
+which AGNTS do I hold
+```
+
+## What you get back
+
+| | What it shows |
+| - | - |
+| Price | The current price and its 24-hour chart |
+| Size | Market cap, fully diluted value, liquidity and volume |
+| Activity | Buys and sells, and the number of holders |
+| Safety | Safety checks and how concentrated the holders are |
+
+<Tip>
+  Ask by **contract address** when you can. Many tokens share a name; an address points at exactly one.
+</Tip>
+
+## More you can look up
+
+- **Your wallet.** Balances across your chains, as a list in Grok and as a wallet panel in Claude.
+- **Your AGNTS.** The pieces of the [AGNTS collection](/agnts/index) your wallet holds, with each one's tier and whether it is activated.
+- **Recent activity and rewards** for your wallet.
+- **Official AGNT addresses and updates.**
+
+## Common questions
+
+### Can Grok check a token's price for me?
+
+Yes, with AGNT connected. Ask for the token by name or contract address and Grok shows its card.
+
+### Can Claude check a token's price for me?
+
+Yes, with AGNT connected. Ask for the token by name or contract address.
+
+### Does this cost anything?
+
+A lookup moves no money and does not count against your trading limits. Only a buy, sell, bridge or send moves money.
+
+### Which chains does it cover?
+
+Token lookups cover Robinhood Chain, Base, Solana and Ethereum.
+
+### Can I buy the token after I look at it?
+
+Yes. In Grok, type the buy and confirm the preview. In Claude, use the **Buy** button in the AGNT wallet panel. Both stay inside the limits you set at [agnt.social/apps](https://agnt.social/apps).
+
+## Start
+
+Sign in at [agnt.social](https://agnt.social), connect AGNT at [agnt.social/apps](https://agnt.social/apps), and ask about your first token.
